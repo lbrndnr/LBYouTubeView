@@ -9,12 +9,12 @@ LBYouTubeView is dead simple. Just add an instance as a subview to a UIViewContr
 Make sure to import the MediaPlayer.framework using #import <MediaPlayer/MediaPlayer.h>
 
 ### Example
-<code>	<p>LBYouTubeView* youTubeView = [[LBYouTubeView alloc] initWithFrame:self.view.bounds];</p>
-		<p>youTubeView.delegate = self;</p>
-    	<p>youTubeView.highQuality = YES;</p>
-		<p>[self.view addSubview:youTubeView];</p>
-    	<p>[youTubeView loadYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"]];</p>
-    	<p>[youTubeView play]; </p></code>
+<pre><code>	LBYouTubeView* youTubeView = [[LBYouTubeView alloc] initWithFrame:self.view.bounds];
+		youTubeView.delegate = self;
+    	youTubeView.highQuality = YES;
+		[self.view addSubview:youTubeView];
+    	[youTubeView loadYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"]];
+    	[youTubeView play]; </code></pre>
 
 ## License
 LBYouTubeView is licensed under the [MIT License](http://opensource.org/licenses/mit-license.php). 
