@@ -10,11 +10,11 @@ Make sure to import the MediaPlayer.framework using #import <MediaPlayer/MediaPl
 
 ### Example
 <pre><code>	LBYouTubeView* youTubeView = [[LBYouTubeView alloc] initWithFrame:self.view.bounds];
-		youTubeView.delegate = self;
-    	youTubeView.highQuality = YES;
-		[self.view addSubview:youTubeView];
-    	[youTubeView loadYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"]];
-    	[youTubeView play]; </code></pre>
+youTubeView.delegate = self;
+youTubeView.highQuality = YES;
+[self.view addSubview:youTubeView];
+[youTubeView loadYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"]];
+[youTubeView play]; </code></pre>
 
 ## License
 LBYouTubeView is licensed under the [MIT License](http://opensource.org/licenses/mit-license.php). 
