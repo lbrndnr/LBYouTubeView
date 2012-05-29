@@ -239,7 +239,7 @@ static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 lik
 
     NSString *JSONStart = nil;
     NSString *JSONStartFull = @"ls.setItem('PIGGYBACK_DATA', \")]}'";
-    NSString *JSONStartShrunk = [JSONStartFull stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *JSONStartShrunk = [JSONStartFull stringByReplacingOccurrencesOfString:@" " withString:@""];
     if ([html rangeOfString:JSONStartFull].location != NSNotFound)
         JSONStart = JSONStartFull;
     else if ([html rangeOfString:JSONStartShrunk].location != NSNotFound)
