@@ -155,8 +155,7 @@ static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 lik
         [scanner setScanLocation:location];
     }
     
-    NSString* retString = [tokenizedString stringByReplacingOccurrencesOfString:@"\\\"" withString:@"\""];
-    retString = [tokenizedString stringByReplacingOccurrencesOfString:@"\\\\\"" withString:@""];
+    NSString* retString = [tokenizedString stringByReplacingOccurrencesOfString:@"\\\\\"" withString:@""];
     return [retString stringByReplacingOccurrencesOfString:@"\\" withString:@""];
 }
 
