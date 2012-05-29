@@ -232,55 +232,66 @@ static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 lik
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)__unused connection {        
     NSString* html = [[NSString alloc] initWithData:self.htmlData encoding:NSUTF8StringEncoding];
-
-    if (!html) {
-        [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:@"Couldn't download the HTML source code" code:1 userInfo:nil]];
+    if (html.length <= 0) {
+        [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:@"LBYouTubeViewErrorDomain" code:1 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't download the HTML source code." forKey:NSLocalizedDescriptionKey]]];
         return;
     }
 
-    NSString* JSONStart = @"ls.setItem('PIGGYBACK_DATA', \")]}'";
-    NSString* JSON = nil;
+    NSString *JSONStart = nil;
+    NSString *JSONStartFull = @"ls.setItem('PIGGYBACK_DATA', \")]}'";
+    NSString *JSONStartShrunk = [JSONStartFull stringByReplacingOccurrencesOfString:@" " withString:@""];
+    if ([html rangeOfString:JSONStartFull].location != NSNotFound)
+        JSONStart = JSONStartFull;
+    else if ([html rangeOfString:JSONStartShrunk].location != NSNotFound)
+        JSONStart = JSONStartShrunk;
 
-    NSScanner* scanner = [NSScanner scannerWithString:html];
-    [scanner scanUpToString:JSONStart intoString:nil];
-    [scanner scanString:JSONStart intoString:nil];
-    [scanner scanUpToString:@"\");" intoString:&JSON];  
-    JSON = [self _unescapeString:JSON];
-    
-    NSError* decodingError = nil;
-    NSDictionary* JSONCode = [NSJSONSerialization JSONObjectWithData:[JSON dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&decodingError];
-
-    if (decodingError) {
-        // Failed
+    if (JSONStart != nil) {
+        NSScanner* scanner = [NSScanner scannerWithString:html];
+        [scanner scanUpToString:JSONStart intoString:nil];
+        [scanner scanString:JSONStart intoString:nil];
         
-        [self _failedExtractingYouTubeURLWithError:decodingError];
-    }
-    else {
-        // Success
+        NSString *JSON = nil;
+        [scanner scanUpToString:@"\");" intoString:&JSON];  
+        JSON = [self _unescapeString:JSON];
         
-        NSDictionary* video = [[JSONCode objectForKey:@"content"] objectForKey:@"video"];
-        NSString* streamURL = nil;
-        NSString* streamURLKey = @"stream_url";
+        NSError* decodingError = nil;
+        NSDictionary* JSONCode = [NSJSONSerialization JSONObjectWithData:[JSON dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&decodingError];
         
-        if (self.highQuality) {
-            streamURL = [video objectForKey:[NSString stringWithFormat:@"hq_%@", streamURLKey]];
-            if (!streamURL) {
+        if (decodingError) {
+            // Failed
+            
+            [self _failedExtractingYouTubeURLWithError:decodingError];
+        }
+        else {
+            // Success
+            
+            NSDictionary* video = [[JSONCode objectForKey:@"content"] objectForKey:@"video"];
+            NSString* streamURL = nil;
+            NSString* streamURLKey = @"stream_url";
+            
+            if (self.highQuality) {
+                streamURL = [video objectForKey:[NSString stringWithFormat:@"hq_%@", streamURLKey]];
+                if (!streamURL) {
+                    streamURL = [video objectForKey:streamURLKey];
+                }
+            }
+            else {
                 streamURL = [video objectForKey:streamURLKey];
             }
-        }
-        else {
-            streamURL = [video objectForKey:streamURLKey];
-        }
-        
-        if (streamURL) {
-            NSURL* finalVideoURL = [NSURL URLWithString:streamURL];
             
-            [self _didSuccessfullyExtractYouTubeURL:finalVideoURL];
-            [self _loadVideoWithContentOfURL:finalVideoURL];
+            if (streamURL) {
+                NSURL* finalVideoURL = [NSURL URLWithString:streamURL];
+                
+                [self _didSuccessfullyExtractYouTubeURL:finalVideoURL];
+                [self _loadVideoWithContentOfURL:finalVideoURL];
+            }
+            else {
+                [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:@"LBYouTubeViewErrorDomain" code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]]];
+            }
         }
-        else {
-            [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:@"Couldn't find the stream URL." code:2 userInfo:[NSDictionary dictionaryWithObject:JSONCode forKey:@"JSONCode"]]];
-        }
+    }
+    else {
+        [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:@"LBYouTubeViewErrorDomain" code:3 userInfo:[NSDictionary dictionaryWithObject:@"The JSON data could not be found." forKey:NSLocalizedDescriptionKey]]];
     }
 
     [self _cleanDownloadUp];
