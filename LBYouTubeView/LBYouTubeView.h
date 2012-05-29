@@ -34,6 +34,7 @@
 
 @optional
 -(void)youTubeView:(LBYouTubeView*)youTubeView didSuccessfullyExtractYouTubeURL:(NSURL*)videoURL;
+-(void)youTubeView:(LBYouTubeView*)youTubeView didStopPlayingYouTubeVideo:(MPMoviePlaybackState)state;
 -(void)youTubeView:(LBYouTubeView*)youTubeView failedExtractingYouTubeURLWithError:(NSError*)error;
 
 @end

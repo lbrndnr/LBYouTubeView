@@ -29,4 +29,8 @@
     NSLog(@"Failed loading video due to error:%@", error);
 }
 
+-(void)youTubeView:(LBYouTubeView *)youTubeView didStopPlayingYouTubeVideo:(MPMoviePlaybackState)state {
+    NSLog(@"Did finish playing YouTube video");
+}
+
 @end

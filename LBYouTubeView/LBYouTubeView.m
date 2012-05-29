@@ -32,7 +32,10 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 -(NSString*)_unescapeString:(NSString*)string;
 -(void)_loadVideoWithContentOfURL:(NSURL*)videoURL;
 
+-(void)_controllerPlaybackStateChanged:(NSNotification*)notification;
+
 -(void)_didSuccessfullyExtractYouTubeURL:(NSURL*)videoURL;
+-(void)_didStopPlayingYouTubeVideo:(MPMoviePlaybackState)state;
 -(void)_failedExtractingYouTubeURLWithError:(NSError*)error;
 
 @end
@@ -79,6 +82,8 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 }
 
 -(void)_setupWithURL:(NSURL *)URL {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_controllerPlaybackStateChanged:) name:MPMoviePlayerPlaybackStateDidChangeNotification object:nil];
+    
     self.backgroundColor = [UIColor blackColor];
     
     self.controller = nil;
@@ -93,6 +98,8 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 #pragma mark Memory
 
 -(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     [self.connection cancel];
 }
 
@@ -169,6 +176,19 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
     
     if (self.shouldAutomaticallyStartPlaying) {
         [self play];
+    }
+}
+
+-(void)_controllerPlaybackStateChanged:(NSNotification *)__unused notification {
+    MPMoviePlaybackState currentState = self.controller.playbackState;
+    if (currentState == MPMoviePlaybackStateStopped || currentState == MPMoviePlaybackStatePaused || currentState == MPMoviePlaybackStateInterrupted) {
+        [self _didStopPlayingYouTubeVideo:currentState];
+    }
+}
+
+-(void)_didStopPlayingYouTubeVideo:(MPMoviePlaybackState)state {
+    if ([self.delegate respondsToSelector:@selector(youTubeView:didStopPlayingYouTubeVideo:)]) {
+        [self.delegate youTubeView:self didStopPlayingYouTubeVideo:state];
     }
 }
 
