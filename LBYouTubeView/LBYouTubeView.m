@@ -234,11 +234,7 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 -(void)connectionDidFinishLoading:(NSURLConnection *)__unused connection {        
     NSString* html = [[NSString alloc] initWithData:self.htmlData encoding:NSUTF8StringEncoding];
     if (html.length <= 0) {
-<<<<<<< HEAD
-        [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:@"LBYouTubeViewErrorDomain" code:1 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't download the HTML source code." forKey:NSLocalizedDescriptionKey]]];
-=======
         [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubeViewErrorDomain code:1 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't download the HTML source code." forKey:NSLocalizedDescriptionKey]]];
->>>>>>> Error domain done right
         return;
     }
 
@@ -291,20 +287,12 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
                 [self _loadVideoWithContentOfURL:finalVideoURL];
             }
             else {
-<<<<<<< HEAD
-                [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:@"LBYouTubeViewErrorDomain" code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]]];
-=======
                 [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubeViewErrorDomain code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]]];
->>>>>>> Error domain done right
             }
         }
     }
     else {
-<<<<<<< HEAD
-        [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:@"LBYouTubeViewErrorDomain" code:3 userInfo:[NSDictionary dictionaryWithObject:@"The JSON data could not be found." forKey:NSLocalizedDescriptionKey]]];
-=======
         [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubeViewErrorDomain code:3 userInfo:[NSDictionary dictionaryWithObject:@"The JSON data could not be found." forKey:NSLocalizedDescriptionKey]]];
->>>>>>> Error domain done right
     }
 
     [self _cleanDownloadUp];
