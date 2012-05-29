@@ -9,6 +9,8 @@
 #import "LBYouTubeView.h"
 #import <MediaPlayer/MediaPlayer.h>
 
+static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
+
 @interface LBYouTubeView () <NSURLConnectionDelegate> {
     NSURLConnection* connection;
     NSMutableData* htmlData;
@@ -26,7 +28,6 @@
 -(void)_setupWithURL:(NSURL*)URL;
 -(void)_cleanDownloadUp;
 
--(NSString*)_userAgent;
 -(NSString*)_unescapeString:(NSString*)string;
 -(void)_loadVideoWithContentOfURL:(NSURL*)videoURL;
 
@@ -39,6 +40,10 @@
 @synthesize connection, htmlData, controller, shouldAutomaticallyStartPlaying, highQuality, delegate;
 
 #pragma mark Initialization
+
++(LBYouTubeView*)youTubeViewWithURL:(NSURL *)URL {
+    return [[self alloc] initWithYouTubeURL:URL];
+}
 
 -(id)initWithYouTubeURL:(NSURL *)URL {
     self = [super init];
@@ -167,28 +172,20 @@
     }
 }
 
--(NSString*)_userAgent {
-    UIDevice* device = [UIDevice currentDevice];
-    
-#if !(TARGET_IPHONE_SIMULATOR)
-    NSString* model = device.model;
-#else 
-    NSString* model = @"iPhone Simulator";
-#endif
-    
-    return [NSString stringWithFormat:@"Mozilla/5.0 (%@; CPU iPhone OS %@ like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Mobile/9B176", model, [device.systemVersion stringByReplacingOccurrencesOfString:@"." withString:@"_"]];
-}
-
 #pragma mark -
 #pragma mark Other Methods
 
++(BOOL)URLIsValid:(NSURL *)URL {
+    return [URL.host isEqualToString:@"www.youtube.com"];
+}
+
 -(void)loadYouTubeURL:(NSURL *)URL {
-    if (![URL.host isEqualToString:@"www.youtube.com"]) {
+    if (![LBYouTubeView URLIsValid:URL]) {
         return;
     }
-    
+
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:URL];
-    [request setValue:[self _userAgent] forHTTPHeaderField:@"User-Agent"];
+    [request setValue:kUserAgent forHTTPHeaderField:@"User-Agent"];
     
     self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
     [connection start];
