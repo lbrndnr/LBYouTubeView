@@ -169,7 +169,14 @@
 
 -(NSString*)_userAgent {
     UIDevice* device = [UIDevice currentDevice];
-    return [NSString stringWithFormat:@"Mozilla/5.0 (%@; CPU iPhone OS %@ like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Mobile/9B176", device.model, [device.systemVersion stringByReplacingOccurrencesOfString:@"." withString:@"_"]];
+    
+#if !(TARGET_IPHONE_SIMULATOR)
+    NSString* model = device.model;
+#else 
+    NSString* model = @"iPhone Simulator";
+#endif
+    
+    return [NSString stringWithFormat:@"Mozilla/5.0 (%@; CPU iPhone OS %@ like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Mobile/9B176", model, [device.systemVersion stringByReplacingOccurrencesOfString:@"." withString:@"_"]];
 }
 
 #pragma mark -
