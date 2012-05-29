@@ -233,6 +233,11 @@ static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 lik
 -(void)connectionDidFinishLoading:(NSURLConnection *)__unused connection {        
     NSString* html = [[NSString alloc] initWithData:self.htmlData encoding:NSUTF8StringEncoding];
 
+    if (!html) {
+        [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:@"Couldn't download the HTML source code" code:1 userInfo:nil]];
+        return;
+    }
+
     NSString* JSONStart = @"ls.setItem('PIGGYBACK_DATA', \")]}'";
     NSString* JSON = nil;
 
@@ -274,7 +279,7 @@ static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 lik
             [self _loadVideoWithContentOfURL:finalVideoURL];
         }
         else {
-            [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:@"Couldn't find the stream URL." code:1 userInfo:[NSDictionary dictionaryWithObject:JSONCode forKey:@"JSONCode"]]];
+            [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:@"Couldn't find the stream URL." code:2 userInfo:[NSDictionary dictionaryWithObject:JSONCode forKey:@"JSONCode"]]];
         }
     }
 
