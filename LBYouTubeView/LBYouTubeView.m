@@ -10,6 +10,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
+static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 
 @interface LBYouTubeView () <NSURLConnectionDelegate> {
     NSURLConnection* connection;
@@ -233,7 +234,11 @@ static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 lik
 -(void)connectionDidFinishLoading:(NSURLConnection *)__unused connection {        
     NSString* html = [[NSString alloc] initWithData:self.htmlData encoding:NSUTF8StringEncoding];
     if (html.length <= 0) {
+<<<<<<< HEAD
         [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:@"LBYouTubeViewErrorDomain" code:1 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't download the HTML source code." forKey:NSLocalizedDescriptionKey]]];
+=======
+        [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubeViewErrorDomain code:1 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't download the HTML source code." forKey:NSLocalizedDescriptionKey]]];
+>>>>>>> Error domain done right
         return;
     }
 
@@ -286,12 +291,20 @@ static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 lik
                 [self _loadVideoWithContentOfURL:finalVideoURL];
             }
             else {
+<<<<<<< HEAD
                 [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:@"LBYouTubeViewErrorDomain" code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]]];
+=======
+                [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubeViewErrorDomain code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]]];
+>>>>>>> Error domain done right
             }
         }
     }
     else {
+<<<<<<< HEAD
         [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:@"LBYouTubeViewErrorDomain" code:3 userInfo:[NSDictionary dictionaryWithObject:@"The JSON data could not be found." forKey:NSLocalizedDescriptionKey]]];
+=======
+        [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubeViewErrorDomain code:3 userInfo:[NSDictionary dictionaryWithObject:@"The JSON data could not be found." forKey:NSLocalizedDescriptionKey]]];
+>>>>>>> Error domain done right
     }
 
     [self _cleanDownloadUp];
