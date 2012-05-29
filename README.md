@@ -16,5 +16,9 @@ youTubeView.highQuality = YES;
 [youTubeView loadYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"]];
 [youTubeView play];</code></pre>
 
+## Requirements
+
+LBYouTubeView requires iOS 5. However it shouldn't be too hard to make it iOS 4 compatible. Also, it is deployed for an ARC environment.
+
 ## License
 LBYouTubeView is licensed under the [MIT License](http://opensource.org/licenses/mit-license.php). 
