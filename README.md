@@ -7,7 +7,7 @@ How does it work? It just loads the HTML code of YouTube's mobile website and lo
 
 ## Setup
 LBYouTubeView is dead simple. Just add an instance as a subview to a UIViewControllers view and tell it, what video it should load.
-Make sure to import the `MediaPlayer.framework` using `#import <MediaPlayer/MediaPlayer.h>`
+Make sure to import the `MediaPlayer.framework`.
 
 ### Example
 ```objc
