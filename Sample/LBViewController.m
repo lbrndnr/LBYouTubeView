@@ -18,6 +18,7 @@
     self.youTubeView.delegate = self;
     self.youTubeView.highQuality = YES;
     [self.youTubeView loadYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"]];
+    // [self.youTubeView loadYouTubeVideoWithId:@"1fTIhC1WSew"];
     [self.youTubeView play];
 }
 
