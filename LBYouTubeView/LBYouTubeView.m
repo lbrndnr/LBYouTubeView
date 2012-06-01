@@ -170,6 +170,7 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 -(void)_loadVideoWithContentOfURL:(NSURL *)videoURL {
     self.controller = [[MPMoviePlayerController alloc] initWithContentURL:videoURL];
     self.controller.view.frame = self.bounds;
+    self.controller.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.controller prepareToPlay];
     
     [self addSubview:self.controller.view];
@@ -196,7 +197,13 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 #pragma mark Other Methods
 
 +(BOOL)URLIsValid:(NSURL *)URL {
-    return [URL.host isEqualToString:@"www.youtube.com"];
+    return ([URL.host isEqualToString:@"youtube.com"] || [URL.host isEqualToString:@"www.youtube.com"]
+            || [URL.host isEqualToString:@"youtu.be"] || [URL.host isEqualToString:@"www.youtu.be"]);
+}
+
+-(void)loadYouTubeVideoWithId:(NSString*)videoId
+{
+    [self loadYouTubeURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", videoId]]];
 }
 
 -(void)loadYouTubeURL:(NSURL *)URL {

@@ -18,8 +18,16 @@
     self.youTubeView.delegate = self;
     self.youTubeView.highQuality = YES;
     [self.youTubeView loadYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"]];
+    // [self.youTubeView loadYouTubeVideoWithId:@"1fTIhC1WSew"];
     [self.youTubeView play];
 }
+
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    return toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
+}
+
+#pragma mark - LBYouTubeViewDelegate
 
 -(void)youTubeView:(LBYouTubeView *)youTubeView didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
     NSLog(@"Did extract video source:%@", videoURL);

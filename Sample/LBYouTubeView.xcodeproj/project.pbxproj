@@ -10,13 +10,13 @@
 		2B16696A15722A920030C509 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B16696915722A920030C509 /* UIKit.framework */; };
 		2B16696C15722A920030C509 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B16696B15722A920030C509 /* Foundation.framework */; };
 		2B16696E15722A920030C509 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B16696D15722A920030C509 /* CoreGraphics.framework */; };
-		2B16697415722A920030C509 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2B16697215722A920030C509 /* InfoPlist.strings */; };
-		2B16697615722A920030C509 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B16697515722A920030C509 /* main.m */; };
-		2B16697A15722A920030C509 /* LBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B16697915722A920030C509 /* LBAppDelegate.m */; };
-		2B16697D15722A920030C509 /* LBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B16697C15722A920030C509 /* LBViewController.m */; };
-		2B16698015722A920030C509 /* LBViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2B16697E15722A920030C509 /* LBViewController.xib */; };
-		2B16698815722A9F0030C509 /* LBYouTubeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B16698715722A9F0030C509 /* LBYouTubeView.m */; };
 		2B16698A15722AC60030C509 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B16698915722AC60030C509 /* MediaPlayer.framework */; };
+		F22E1E661578FEF100FD9E79 /* LBYouTubeView.m in Sources */ = {isa = PBXBuildFile; fileRef = F22E1E651578FEF100FD9E79 /* LBYouTubeView.m */; };
+		F22E1E691578FF5600FD9E79 /* LBViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F22E1E671578FF5600FD9E79 /* LBViewController.xib */; };
+		F22E1E6C1578FF6100FD9E79 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F22E1E6A1578FF6100FD9E79 /* InfoPlist.strings */; };
+		F22E1E701578FFBD00FD9E79 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F22E1E6F1578FFBD00FD9E79 /* main.m */; };
+		F233443015790117001DC9D0 /* LBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F233442F157900ED001DC9D0 /* LBViewController.m */; };
+		F23344311579011A001DC9D0 /* LBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F233442D157900ED001DC9D0 /* LBAppDelegate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,18 +24,18 @@
 		2B16696915722A920030C509 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2B16696B15722A920030C509 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2B16696D15722A920030C509 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		2B16697115722A920030C509 /* LBYouTubeView-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LBYouTubeView-Info.plist"; sourceTree = "<group>"; };
-		2B16697315722A920030C509 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		2B16697515722A920030C509 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		2B16697715722A920030C509 /* LBYouTubeView-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LBYouTubeView-Prefix.pch"; sourceTree = "<group>"; };
-		2B16697815722A920030C509 /* LBAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBAppDelegate.h; sourceTree = "<group>"; };
-		2B16697915722A920030C509 /* LBAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBAppDelegate.m; sourceTree = "<group>"; };
-		2B16697B15722A920030C509 /* LBViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBViewController.h; sourceTree = "<group>"; };
-		2B16697C15722A920030C509 /* LBViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBViewController.m; sourceTree = "<group>"; };
-		2B16697F15722A920030C509 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LBViewController.xib; sourceTree = "<group>"; };
-		2B16698615722A9F0030C509 /* LBYouTubeView.h */ = {isa = PBXFileReference; fileEncoding = 4; path = LBYouTubeView.h; sourceTree = "<group>"; };
-		2B16698715722A9F0030C509 /* LBYouTubeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBYouTubeView.m; sourceTree = "<group>"; };
 		2B16698915722AC60030C509 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		F22E1E641578FEF100FD9E79 /* LBYouTubeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBYouTubeView.h; sourceTree = "<group>"; };
+		F22E1E651578FEF100FD9E79 /* LBYouTubeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBYouTubeView.m; sourceTree = "<group>"; };
+		F22E1E681578FF5600FD9E79 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LBViewController.xib; sourceTree = SOURCE_ROOT; };
+		F22E1E6B1578FF6100FD9E79 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
+		F22E1E6D1578FF7B00FD9E79 /* LBYouTubeView-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "LBYouTubeView-Info.plist"; sourceTree = SOURCE_ROOT; };
+		F22E1E6F1578FFBD00FD9E79 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = SOURCE_ROOT; };
+		F22E1E711578FFC700FD9E79 /* LBYouTubeView-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LBYouTubeView-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		F233442C157900ED001DC9D0 /* LBAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBAppDelegate.h; sourceTree = SOURCE_ROOT; };
+		F233442D157900ED001DC9D0 /* LBAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBAppDelegate.m; sourceTree = SOURCE_ROOT; };
+		F233442E157900ED001DC9D0 /* LBViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBViewController.h; sourceTree = SOURCE_ROOT; };
+		F233442F157900ED001DC9D0 /* LBViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBViewController.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +56,8 @@
 		2B16695A15722A920030C509 = {
 			isa = PBXGroup;
 			children = (
-				2B16696F15722A920030C509 /* LBYouTubeView */,
+				F22E1E631578FEF100FD9E79 /* LBYouTubeView */,
+				2B16696F15722A920030C509 /* LBYouTubeViewSample */,
 				2B16696815722A920030C509 /* Frameworks */,
 				2B16696615722A920030C509 /* Products */,
 			);
@@ -81,30 +82,39 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		2B16696F15722A920030C509 /* LBYouTubeView */ = {
+		2B16696F15722A920030C509 /* LBYouTubeViewSample */ = {
 			isa = PBXGroup;
 			children = (
-				2B16698615722A9F0030C509 /* LBYouTubeView.h */,
-				2B16698715722A9F0030C509 /* LBYouTubeView.m */,
-				2B16697815722A920030C509 /* LBAppDelegate.h */,
-				2B16697915722A920030C509 /* LBAppDelegate.m */,
-				2B16697B15722A920030C509 /* LBViewController.h */,
-				2B16697C15722A920030C509 /* LBViewController.m */,
-				2B16697E15722A920030C509 /* LBViewController.xib */,
+				F233442C157900ED001DC9D0 /* LBAppDelegate.h */,
+				F233442D157900ED001DC9D0 /* LBAppDelegate.m */,
+				F233442E157900ED001DC9D0 /* LBViewController.h */,
+				F233442F157900ED001DC9D0 /* LBViewController.m */,
+				F22E1E671578FF5600FD9E79 /* LBViewController.xib */,
 				2B16697015722A920030C509 /* Supporting Files */,
 			);
+			name = LBYouTubeViewSample;
 			path = LBYouTubeView;
 			sourceTree = "<group>";
 		};
 		2B16697015722A920030C509 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				2B16697115722A920030C509 /* LBYouTubeView-Info.plist */,
-				2B16697215722A920030C509 /* InfoPlist.strings */,
-				2B16697515722A920030C509 /* main.m */,
-				2B16697715722A920030C509 /* LBYouTubeView-Prefix.pch */,
+				F22E1E6D1578FF7B00FD9E79 /* LBYouTubeView-Info.plist */,
+				F22E1E6A1578FF6100FD9E79 /* InfoPlist.strings */,
+				F22E1E6F1578FFBD00FD9E79 /* main.m */,
+				F22E1E711578FFC700FD9E79 /* LBYouTubeView-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F22E1E631578FEF100FD9E79 /* LBYouTubeView */ = {
+			isa = PBXGroup;
+			children = (
+				F22E1E641578FEF100FD9E79 /* LBYouTubeView.h */,
+				F22E1E651578FEF100FD9E79 /* LBYouTubeView.m */,
+			);
+			name = LBYouTubeView;
+			path = ../LBYouTubeView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -158,8 +168,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B16697415722A920030C509 /* InfoPlist.strings in Resources */,
-				2B16698015722A920030C509 /* LBViewController.xib in Resources */,
+				F22E1E691578FF5600FD9E79 /* LBViewController.xib in Resources */,
+				F22E1E6C1578FF6100FD9E79 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,30 +180,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2B16697615722A920030C509 /* main.m in Sources */,
-				2B16697A15722A920030C509 /* LBAppDelegate.m in Sources */,
-				2B16697D15722A920030C509 /* LBViewController.m in Sources */,
-				2B16698815722A9F0030C509 /* LBYouTubeView.m in Sources */,
+				F22E1E661578FEF100FD9E79 /* LBYouTubeView.m in Sources */,
+				F22E1E701578FFBD00FD9E79 /* main.m in Sources */,
+				F233443015790117001DC9D0 /* LBViewController.m in Sources */,
+				F23344311579011A001DC9D0 /* LBAppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		2B16697215722A920030C509 /* InfoPlist.strings */ = {
+		F22E1E671578FF5600FD9E79 /* LBViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2B16697315722A920030C509 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		2B16697E15722A920030C509 /* LBViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2B16697F15722A920030C509 /* en */,
+				F22E1E681578FF5600FD9E79 /* en */,
 			);
 			name = LBViewController.xib;
+			sourceTree = "<group>";
+		};
+		F22E1E6A1578FF6100FD9E79 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F22E1E6B1578FF6100FD9E79 /* en */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -247,8 +257,8 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "LBYouTubeView/LBYouTubeView-Prefix.pch";
-				INFOPLIST_FILE = "LBYouTubeView/LBYouTubeView-Info.plist";
+				GCC_PREFIX_HEADER = "LBYouTubeView-Prefix.pch";
+				INFOPLIST_FILE = "LBYouTubeView-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -259,8 +269,8 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "LBYouTubeView/LBYouTubeView-Prefix.pch";
-				INFOPLIST_FILE = "LBYouTubeView/LBYouTubeView-Info.plist";
+				GCC_PREFIX_HEADER = "LBYouTubeView-Prefix.pch";
+				INFOPLIST_FILE = "LBYouTubeView-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -285,6 +295,7 @@
 				2B16698515722A920030C509 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
