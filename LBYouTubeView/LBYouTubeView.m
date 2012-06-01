@@ -170,6 +170,7 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 -(void)_loadVideoWithContentOfURL:(NSURL *)videoURL {
     self.controller = [[MPMoviePlayerController alloc] initWithContentURL:videoURL];
     self.controller.view.frame = self.bounds;
+    self.controller.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.controller prepareToPlay];
     
     [self addSubview:self.controller.view];

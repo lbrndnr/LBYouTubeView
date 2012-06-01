@@ -21,6 +21,13 @@
     [self.youTubeView play];
 }
 
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+{
+    return toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
+}
+
+#pragma mark - LBYouTubeViewDelegate
+
 -(void)youTubeView:(LBYouTubeView *)youTubeView didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
     NSLog(@"Did extract video source:%@", videoURL);
 }
