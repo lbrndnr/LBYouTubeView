@@ -197,10 +197,8 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 #pragma mark Other Methods
 
 +(BOOL)URLIsValid:(NSURL *)URL {
-    return ([URL.host isEqualToString:@"www.youtube.com"] 
-            || [URL.host isEqualToString:@"www.youtube.com"]
-            || [URL.host isEqualToString:@"youtu.be"]
-            || [URL.host isEqualToString:@"www.youtu.be"]);
+    return ([URL.host isEqualToString:@"youtube.com"] || [URL.host isEqualToString:@"www.youtube.com"]
+            || [URL.host isEqualToString:@"youtu.be"] || [URL.host isEqualToString:@"www.youtu.be"]);
 }
 
 -(void)loadYouTubeVideoWithId:(NSString*)videoId
