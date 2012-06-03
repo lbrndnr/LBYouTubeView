@@ -23,8 +23,6 @@
 +(LBYouTubeView*)youTubeViewWithURL:(NSURL*)URL;
 -(id)initWithYouTubeURL:(NSURL*)URL;
 
-+(BOOL)URLIsValid:(NSURL*)URL;
-
 -(void)loadYouTubeURL:(NSURL*)URL;
 -(void)loadYouTubeVideoWithID:(NSString*)videoID;
 -(void)play;

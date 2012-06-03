@@ -196,20 +196,11 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 #pragma mark -
 #pragma mark Other Methods
 
-+(BOOL)URLIsValid:(NSURL *)URL {
-    return ([URL.host isEqualToString:@"youtube.com"] || [URL.host isEqualToString:@"www.youtube.com"]
-            || [URL.host isEqualToString:@"youtu.be"] || [URL.host isEqualToString:@"www.youtu.be"]);
-}
-
 -(void)loadYouTubeVideoWithID:(NSString*)videoID {
     [self loadYouTubeURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", videoID]]];
 }
 
 -(void)loadYouTubeURL:(NSURL *)URL {
-    if (![LBYouTubeView URLIsValid:URL]) {
-        return;
-    }
-
     NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:URL];
     [request setValue:kUserAgent forHTTPHeaderField:@"User-Agent"];
     
@@ -260,7 +251,7 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 -(void)connectionDidFinishLoading:(NSURLConnection *)__unused connection {        
     NSString* html = [[NSString alloc] initWithData:self.htmlData encoding:NSUTF8StringEncoding];
     if (html.length <= 0) {
-        [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubeViewErrorDomain code:1 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't download the HTML source code." forKey:NSLocalizedDescriptionKey]]];
+        [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubeViewErrorDomain code:1 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't download the HTML source code. URL might be invalid." forKey:NSLocalizedDescriptionKey]]];
         return;
     }
 
