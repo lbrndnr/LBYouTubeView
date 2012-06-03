@@ -201,9 +201,8 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
             || [URL.host isEqualToString:@"youtu.be"] || [URL.host isEqualToString:@"www.youtu.be"]);
 }
 
--(void)loadYouTubeVideoWithId:(NSString*)videoId
-{
-    [self loadYouTubeURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", videoId]]];
+-(void)loadYouTubeVideoWithID:(NSString*)videoID {
+    [self loadYouTubeURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", videoID]]];
 }
 
 -(void)loadYouTubeURL:(NSURL *)URL {

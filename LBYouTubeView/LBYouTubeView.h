@@ -26,7 +26,7 @@
 +(BOOL)URLIsValid:(NSURL*)URL;
 
 -(void)loadYouTubeURL:(NSURL*)URL;
--(void)loadYouTubeVideoWithId:(NSString*)videoId;
+-(void)loadYouTubeVideoWithID:(NSString*)videoID;
 -(void)play;
 -(void)stop;
 

@@ -57,7 +57,7 @@
 			isa = PBXGroup;
 			children = (
 				F22E1E631578FEF100FD9E79 /* LBYouTubeView */,
-				2B16696F15722A920030C509 /* LBYouTubeViewSample */,
+				2B16696F15722A920030C509 /* LBYouTubeView Sample */,
 				2B16696815722A920030C509 /* Frameworks */,
 				2B16696615722A920030C509 /* Products */,
 			);
@@ -82,7 +82,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		2B16696F15722A920030C509 /* LBYouTubeViewSample */ = {
+		2B16696F15722A920030C509 /* LBYouTubeView Sample */ = {
 			isa = PBXGroup;
 			children = (
 				F233442C157900ED001DC9D0 /* LBAppDelegate.h */,
@@ -92,7 +92,7 @@
 				F22E1E671578FF5600FD9E79 /* LBViewController.xib */,
 				2B16697015722A920030C509 /* Supporting Files */,
 			);
-			name = LBYouTubeViewSample;
+			name = "LBYouTubeView Sample";
 			path = LBYouTubeView;
 			sourceTree = "<group>";
 		};
