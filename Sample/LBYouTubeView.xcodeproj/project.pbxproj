@@ -256,10 +256,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jon Chui (U3HPA5CQXG)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LBYouTubeView-Prefix.pch";
 				INFOPLIST_FILE = "LBYouTubeView-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "765EE5B1-B8B0-482D-A292-2ABCD9E954FC";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
