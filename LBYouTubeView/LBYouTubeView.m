@@ -109,6 +109,7 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
         NSLog(@"tapped:  %@", self.parsedYouTubeURL);
     if (self.parsedYouTubeURL) {
         [self _loadVideoWithContentOfURL:self.parsedYouTubeURL];
+        [self play];
     }
 
 
