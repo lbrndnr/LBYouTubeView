@@ -12,5 +12,6 @@
 @interface LBViewController : UIViewController <LBYouTubeViewDelegate>
 
 @property (nonatomic, strong) IBOutlet LBYouTubeView* youTubeView;
+@property (weak, nonatomic) IBOutlet LBYouTubeView *youTubeView2;
 
 @end
