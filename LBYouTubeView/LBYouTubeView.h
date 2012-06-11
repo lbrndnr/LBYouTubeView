@@ -17,7 +17,6 @@
 @property (nonatomic, unsafe_unretained) IBOutlet id <LBYouTubeViewDelegate> delegate;
 @property (nonatomic) BOOL highQuality;
 
-+ (LBYouTubeView *)youTubeViewWithURL:(NSURL *)URL;
 - (id)initWithYouTubeURL:(NSURL *)URL;
 
 - (void)loadYouTubeURL:(NSURL *)URL;
@@ -26,6 +25,8 @@
 - (void)stop;
 
 @end
+
+
 @protocol LBYouTubeViewDelegate <NSObject>
 
 @optional

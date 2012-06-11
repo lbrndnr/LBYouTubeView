@@ -39,15 +39,13 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 -(void)_failedExtractingYouTubeURLWithError:(NSError*)error;
 
 @end
+
+
 @implementation LBYouTubeView
 
 @synthesize connection, htmlData, controller, shouldAutomaticallyStartPlaying, highQuality, delegate;
 
 #pragma mark Initialization
-
-+(LBYouTubeView*)youTubeViewWithURL:(NSURL *)URL {
-    return [[self alloc] initWithYouTubeURL:URL];
-}
 
 -(id)initWithYouTubeURL:(NSURL *)URL {
     self = [super init];
