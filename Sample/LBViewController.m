@@ -12,6 +12,10 @@
 
 @synthesize youTubeView;
 
+- (void)dealloc {
+    self.youTubeView.delegate = nil;
+}
+
 -(void)viewDidLoad {
     [super viewDidLoad];
 	
