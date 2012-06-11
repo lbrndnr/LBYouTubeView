@@ -9,6 +9,9 @@
 #import "LBYouTubeExtractor.h"
 #import "JSONKit.h"
 
+#define USE_NATIVE_JSON_PARSER  1
+#define USE_NATIVE_UNESCAPE     1
+
 static NSString const * kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
 NSString const * LBYouTubeExtractorErrorDomain = @"LBYouTubeExtractorErrorDomain";
 
@@ -73,6 +76,8 @@ NSInteger const LBYouTubeExtractorErrorCodeNoJSONData   =    3;
 }
                    
 - (NSURL *)movieURLParsingHTML:(NSString *)html error:(NSError **)error {
+//    NSLog(@"\n\n\n\n\n%@\n\n\n\n\n\n", html);
+    
     NSString *JSONStart = nil;
     NSString *JSONStartFull = @"ls.setItem('PIGGYBACK_DATA', \")]}'";
     NSString *JSONStartShrunk = [JSONStartFull stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -110,26 +115,49 @@ NSInteger const LBYouTubeExtractorErrorCodeNoJSONData   =    3;
     NSString *JSON = nil;
     [scanner scanUpToString:@"\");" intoString:&JSON];  
     JSON = [self unescapeString:JSON];
+    
+//    NSLog(@"\n\n\n\n%@\n\n\n\n\n", JSON);
+    
+    if (JSON == nil) {
+        // No JSON: return an error
+        NSDictionary *errorUserInfo = [[NSDictionary alloc] initWithObjectsAndKeys:@"The JSON data could not be found.", NSLocalizedDescriptionKey, nil];
+        NSError *theError = [[NSError alloc] initWithDomain:(NSString *)LBYouTubeExtractorErrorDomain code:LBYouTubeExtractorErrorCodeNoJSONData userInfo:errorUserInfo];
+        
+        if (error != NULL) {
+            *error = theError;
+        }
+        
+        return nil;
+    }
         
     // Stop if cancellation is requested
     if ([self isCancelled]) return nil;
     
-    // Setup JSON decoder
-    JSONDecoder *decoder = [[JSONDecoder alloc] initWithParseOptions:JKParseOptionNone];
+    BOOL useNativeParser;
+#if USE_NATIVE_JSON_PARSER
+    useNativeParser = ([NSJSONSerialization class] != nil);
+#else
+    useNativeParser = NO;
+#endif
     
     NSError *decodingError = nil;
-    NSData *htmlData = [JSON dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *jsonData = [JSON dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *jsonDict;
     
-    // Stop if cancellation is requested
-    if ([self isCancelled]) return nil;
-    
-    // Guard against JSONKit exceptions
-    @try {
-        jsonDict = [decoder objectWithData:htmlData error:&decodingError];
+    if (useNativeParser) {
+        jsonDict = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&decodingError];
     }
-    @catch (NSException *exception) {
-        jsonDict = nil;
+    else {
+        // Setup JSON decoder
+        JSONDecoder *decoder = [[JSONDecoder alloc] initWithParseOptions:JKParseOptionNone];        
+        
+        // Guard against JSONKit exceptions
+        @try {
+            jsonDict = [decoder objectWithData:jsonData error:&decodingError];
+        }
+        @catch (NSException *exception) {
+            jsonDict = nil;
+        }
     }
     
     // Check errors
@@ -181,8 +209,42 @@ NSInteger const LBYouTubeExtractorErrorCodeNoJSONData   =    3;
     return nil;
 }
 
-// Modified answer from StackOverflow http://stackoverflow.com/questions/2099349/using-objective-c-cocoa-to-unescape-unicode-characters-ie-u1234
+/*
+ Native:
+ not very perfoming but more reliable
+ Modified from http://stackoverflow.com/a/2099484/224629
+ 
+ Not native:
+ Modified answer from StackOverflow http://stackoverflow.com/questions/2099349/using-objective-c-cocoa-to-unescape-unicode-characters-ie-u1234
+ */
 - (NSString *)unescapeString:(NSString *)string {
+#if USE_NATIVE_UNESCAPE
+    // will cause trouble if you have "abc\\\\uvw"
+    @autoreleasepool {
+        // \u   --->    \U
+        NSString *esc1 = [string stringByReplacingOccurrencesOfString:@"\\u" withString:@"\\U"];
+        
+        // "    --->    \"
+        NSString *esc2 = [esc1 stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+        
+        // \\"  --->    \"
+        NSString *esc3 = [esc2 stringByReplacingOccurrencesOfString:@"\\\\\"" withString:@"\\\""];
+
+        NSString *quoted = [[@"\"" stringByAppendingString:esc3] stringByAppendingString:@"\""];
+        NSData *data = [quoted dataUsingEncoding:NSUTF8StringEncoding];
+        
+//        NSPropertyListFormat format = 0;
+//        NSString *errorDescr = nil;
+        NSString *unesc = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
+        
+        if ([unesc isKindOfClass:[NSString class]]) {
+            // \U   --->    \u
+            return [unesc stringByReplacingOccurrencesOfString:@"\\U" withString:@"\\u"];
+        }
+        
+        return nil;
+    }
+#else
     // tokenize based on unicode escape char
     NSMutableString* tokenizedString = [NSMutableString string];
     NSScanner* scanner = [NSScanner scannerWithString:string];
@@ -234,6 +296,7 @@ NSInteger const LBYouTubeExtractorErrorCodeNoJSONData   =    3;
     
     NSString* retString = [tokenizedString stringByReplacingOccurrencesOfString:@"\\\\\"" withString:@""];
     return [retString stringByReplacingOccurrencesOfString:@"\\" withString:@""];
+#endif
 }
 
 @end
