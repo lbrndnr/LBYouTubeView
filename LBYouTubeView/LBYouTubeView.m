@@ -26,6 +26,9 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 
 @property (nonatomic) BOOL shouldAutomaticallyStartPlaying;
 
+@property (nonatomic, strong) NSURL *parsedYouTubeURL; // nil if not parsed
+@property (nonatomic, strong) NSURL *originalYouTubeURL; // 
+
 -(void)_setupWithURL:(NSURL*)URL;
 -(void)_cleanDownloadUp;
 
@@ -42,6 +45,8 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 @implementation LBYouTubeView
 
 @synthesize connection, htmlData, controller, shouldAutomaticallyStartPlaying, highQuality, delegate;
+@synthesize parsedYouTubeURL = _parsedYouTubeURL;
+@synthesize originalYouTubeURL = _originalYouTubeURL;
 
 #pragma mark Initialization
 
@@ -84,6 +89,7 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
 -(void)_setupWithURL:(NSURL *)URL {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_controllerPlaybackStateChanged:) name:MPMoviePlayerPlaybackStateDidChangeNotification object:nil];
     
+    self.originalYouTubeURL = URL;
     self.backgroundColor = [UIColor blackColor];
     
     self.controller = nil;
@@ -92,6 +98,21 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
     if (URL) {
         [self loadYouTubeURL:URL];
     }
+    
+    // this gesture recognizer, allows multiple LBYouTubeViews to be used
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                          action:@selector(didTapView:)];
+    [self addGestureRecognizer:tap];
+}
+
+- (void) didTapView:(id)sender{
+        NSLog(@"tapped:  %@", self.parsedYouTubeURL);
+    if (self.parsedYouTubeURL) {
+        [self _loadVideoWithContentOfURL:self.parsedYouTubeURL];
+        [self play];
+    }
+
+
 }
 
 #pragma mark -
@@ -302,6 +323,7 @@ static NSString* const kLBYouTubeViewErrorDomain = @"LBYouTubeViewErrorDomain";
                 
                 [self _didSuccessfullyExtractYouTubeURL:finalVideoURL];
                 [self _loadVideoWithContentOfURL:finalVideoURL];
+                self.parsedYouTubeURL = finalVideoURL;
             }
             else {
                 [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubeViewErrorDomain code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]]];

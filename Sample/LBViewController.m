@@ -11,16 +11,22 @@
 @implementation LBViewController
 
 @synthesize youTubeView;
+@synthesize youTubeView2;
 
 -(void)viewDidLoad {
     [super viewDidLoad];
 	
-    self.youTubeView.delegate = self;
-    self.youTubeView.highQuality = YES;
-    //[self.youTubeView loadYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"]];
-    [self.youTubeView loadYouTubeVideoWithID:@"1fTIhC1WSew"];
-    [self.youTubeView play];
+    for (LBYouTubeView *v in [NSArray arrayWithObjects:self.youTubeView,self.youTubeView2, nil]) {
+        v.delegate = self;
+        v.highQuality = YES;
+       //[v loadYouTubeVideoWithID:@"1fTIhC1WSew"];
+        //[v play];
+    }
+    [self.youTubeView loadYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"]];
+    [self.youTubeView2 loadYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=CC3Qr4VC2MI&feature=g-all-lik"]];
+
 }
+
 
 -(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
@@ -41,4 +47,8 @@
     NSLog(@"Did finish playing YouTube video");
 }
 
+- (void)viewDidUnload {
+    [self setYouTubeView2:nil];
+    [super viewDidUnload];
+}
 @end
