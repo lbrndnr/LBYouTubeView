@@ -11,29 +11,27 @@
 
 @protocol LBYouTubeViewDelegate;
 
-@interface LBYouTubeView : UIView {
-    id <LBYouTubeViewDelegate> __weak delegate;
-    BOOL highQuality;
-}
+@interface LBYouTubeView : UIView
 
-@property (nonatomic, strong, readonly) MPMoviePlayerController* controller;
-@property (nonatomic, weak) IBOutlet id <LBYouTubeViewDelegate> delegate;
+@property (nonatomic, strong, readonly) MPMoviePlayerController *controller;
+@property (nonatomic, unsafe_unretained) IBOutlet id <LBYouTubeViewDelegate> delegate;
 @property (nonatomic) BOOL highQuality;
 
-+(LBYouTubeView*)youTubeViewWithURL:(NSURL*)URL;
--(id)initWithYouTubeURL:(NSURL*)URL;
+- (id)initWithYouTubeURL:(NSURL *)URL;
 
--(void)loadYouTubeURL:(NSURL*)URL;
--(void)loadYouTubeVideoWithID:(NSString*)videoID;
--(void)play;
--(void)stop;
+- (void)loadYouTubeURL:(NSURL *)URL;
+- (void)loadYouTubeVideoWithID:(NSString *)videoID;
+- (void)play;
+- (void)stop;
 
 @end
+
+
 @protocol LBYouTubeViewDelegate <NSObject>
 
 @optional
--(void)youTubeView:(LBYouTubeView*)youTubeView didSuccessfullyExtractYouTubeURL:(NSURL*)videoURL;
--(void)youTubeView:(LBYouTubeView*)youTubeView didStopPlayingYouTubeVideo:(MPMoviePlaybackState)state;
--(void)youTubeView:(LBYouTubeView*)youTubeView failedExtractingYouTubeURLWithError:(NSError*)error;
+- (void)youTubeView:(LBYouTubeView *)youTubeView didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL;
+- (void)youTubeView:(LBYouTubeView *)youTubeView didStopPlayingYouTubeVideo:(MPMoviePlaybackState)state;
+- (void)youTubeView:(LBYouTubeView *)youTubeView failedExtractingYouTubeURLWithError:(NSError *)error;
 
 @end
