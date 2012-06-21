@@ -220,30 +220,28 @@ NSInteger const LBYouTubeExtractorErrorCodeNoJSONData   =    3;
 - (NSString *)unescapeString:(NSString *)string {
 #if USE_NATIVE_UNESCAPE
     // will cause trouble if you have "abc\\\\uvw"
-    @autoreleasepool {
-        // \u   --->    \U
-        NSString *esc1 = [string stringByReplacingOccurrencesOfString:@"\\u" withString:@"\\U"];
-        
-        // "    --->    \"
-        NSString *esc2 = [esc1 stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
-        
-        // \\"  --->    \"
-        NSString *esc3 = [esc2 stringByReplacingOccurrencesOfString:@"\\\\\"" withString:@"\\\""];
+    // \u   --->    \U
+    NSString *esc1 = [string stringByReplacingOccurrencesOfString:@"\\u" withString:@"\\U"];
+    
+    // "    --->    \"
+    NSString *esc2 = [esc1 stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    
+    // \\"  --->    \"
+    NSString *esc3 = [esc2 stringByReplacingOccurrencesOfString:@"\\\\\"" withString:@"\\\""];
 
-        NSString *quoted = [[@"\"" stringByAppendingString:esc3] stringByAppendingString:@"\""];
-        NSData *data = [quoted dataUsingEncoding:NSUTF8StringEncoding];
-        
-//        NSPropertyListFormat format = 0;
-//        NSString *errorDescr = nil;
-        NSString *unesc = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
-        
-        if ([unesc isKindOfClass:[NSString class]]) {
-            // \U   --->    \u
-            return [unesc stringByReplacingOccurrencesOfString:@"\\U" withString:@"\\u"];
-        }
-        
-        return nil;
+    NSString *quoted = [[@"\"" stringByAppendingString:esc3] stringByAppendingString:@"\""];
+    NSData *data = [quoted dataUsingEncoding:NSUTF8StringEncoding];
+    
+//  NSPropertyListFormat format = 0;
+//  NSString *errorDescr = nil;
+    NSString *unesc = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
+    
+    if ([unesc isKindOfClass:[NSString class]]) {
+        // \U   --->    \u
+        return [unesc stringByReplacingOccurrencesOfString:@"\\U" withString:@"\\u"];
     }
+    
+    return nil;
 #else
     // tokenize based on unicode escape char
     NSMutableString* tokenizedString = [NSMutableString string];
