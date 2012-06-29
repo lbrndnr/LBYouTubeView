@@ -1,5 +1,5 @@
 //
-//  LBYouTubeExtractor.h
+//  LBYouTubePlayerController.h
 //  LBYouTubeView
 //
 //  Created by Marco Muccinelli on 11/06/12.
@@ -7,67 +7,36 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "LBYouTubePlayerController.h"
 
-extern NSString const *     LBYouTubeExtractorErrorDomain;
-extern NSInteger const      LBYouTubeExtractorErrorCodeInvalidHTML;
-extern NSInteger const      LBYouTubeExtractorErrorCodeNoStreamURL;
-extern NSInteger const      LBYouTubeExtractorErrorCodeNoJSONData;
+extern NSString* const LBYouTubePlayerControllerErrorDomain;
+extern NSInteger const LBYouTubePlayerControllerErrorCodeInvalidHTML;
+extern NSInteger const LBYouTubePlayerControllerErrorCodeNoStreamURL;
+extern NSInteger const LBYouTubePlayerControllerErrorCodeNoJSONData;
 
-@interface LBYouTubeExtractor : NSObject
-/**
- Original YouTube URL requested for extraction.
- */
-@property (nonatomic, strong) NSURL *youTubeURL;
-/**
- Extract high quality video URL
- 
- Default is `NO`.
- */
+@protocol LBYouTubePlayerControllerDelegate;
+
+@interface LBYouTubePlayerViewController : NSObject {
+    BOOL highQuality;
+    NSURL* youTubeURL;
+    NSURL* extractedURL;
+    LBYouTubePlayerController* view;
+    id <LBYouTubePlayerControllerDelegate> __unsafe_unretained delegate;
+}
+
 @property (nonatomic) BOOL highQuality;
-/**
- Extracted URL
- */
+@property (nonatomic, strong, readonly) NSURL* youTubeURL;
 @property (nonatomic, strong, readonly) NSURL *extractedURL;
-/**
- Handler called when extraction finishes.
- 
- If extraction fails, `extractedURL` is `nil`.
- */
-@property (nonatomic, copy) void (^completionHandler)(NSURL *extractedURL, NSError *error);
+@property (nonatomic, strong, readonly) LBYouTubePlayerController* view;
+@property (nonatomic, unsafe_unretained) IBOutlet id <LBYouTubePlayerControllerDelegate> delegate;
+
+-(id)initWithYouTubeURL:(NSURL*)youTubeURL;
+-(id)initWithYouTubeID:(NSString*)youTubeID;
+
 @end
+@protocol LBYouTubePlayerControllerDelegate <NSObject>
 
+-(void)youTubePlayerViewController:(LBYouTubePlayerViewController *)controller didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL;
+-(void)youTubePlayerViewController:(LBYouTubePlayerViewController *)controller failedExtractingYouTubeURLWithError:(NSError *)error;
 
-@interface LBYouTubeExtractor (Extraction)
-/**
- Check extraction status.
- 
- @return `YES` if extraction is in progress.
- */
-- (BOOL)isRunning;
-/**
- Start extraction.
- 
- It checks against isRunning before to start connection.
- */
-- (void)start;
-/**
- Cancel extraction.
- */
-- (void)cancel;
-@end
-
-
-@interface LBYouTubeExtractor (Callbacks)
-/**
- Callback for success.
- 
- It invokes completionHandler.
- */
-- (void)didFinishExtractingURL:(NSURL *)extractedURL;
-/**
- Callback for failure.
- 
- It invokes completionHandler.
- */
-- (void)didFailExtractingURLWithError:(NSError *)error;
 @end

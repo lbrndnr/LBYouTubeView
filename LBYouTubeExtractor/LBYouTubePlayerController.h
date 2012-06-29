@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MediaPlayer/MediaPlayer.h>
 
-@interface LBYouTubePlayerController : UIView
+@interface LBYouTubePlayerController : UIView {
+    MPMoviePlayerController* controller;
+}
+
+@property (nonatomic, strong, readonly) MPMoviePlayerController* controller;
+
+-(void)loadYouTubeVideo:(NSURL*)URL;
 
 @end

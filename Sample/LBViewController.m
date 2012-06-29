@@ -7,42 +7,40 @@
 //
 
 #import "LBViewController.h"
+#import "LBYouTubePlayerViewController.h"
 
 @implementation LBViewController
 
-@synthesize youTubeView;
+@synthesize controller;
 
 - (void)dealloc {
-    self.youTubeView.delegate = nil;
+    self.controller.delegate = nil;
 }
 
 -(void)viewDidLoad {
     [super viewDidLoad];
 	
-    self.youTubeView.delegate = self;
-    self.youTubeView.highQuality = YES;
-    //[self.youTubeView loadYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"]];
-    [self.youTubeView loadYouTubeVideoWithID:@"1fTIhC1WSew"];
-    [self.youTubeView play];
+    self.controller = [[LBYouTubePlayerViewController alloc] initWithYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"]];
+    self.controller.delegate = self;
+    self.controller.highQuality = YES;
+    self.controller.view.frame = CGRectMake(0.0f, 0.0f, 200.0f, 200.0f);
+    self.controller.view.center = self.view.center;
+    [self.view addSubview:self.controller.view];
 }
 
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
-{
+-(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
     return toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
 }
 
-#pragma mark - LBYouTubeViewDelegate
+#pragma mark - 
+#pragma mark LBYouTubePlayerViewControllerDelegate
 
--(void)youTubeView:(LBYouTubeView *)youTubeView didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
+-(void)youTubePlayerViewController:(LBYouTubePlayerViewController *)controller didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
     NSLog(@"Did extract video source:%@", videoURL);
 }
 
--(void)youTubeView:(LBYouTubeView *)youTubeView failedExtractingYouTubeURLWithError:(NSError *)error {
+-(void)youTubePlayerViewController:(LBYouTubePlayerViewController *)controller failedExtractingYouTubeURLWithError:(NSError *)error {
     NSLog(@"Failed loading video due to error:%@", error);
-}
-
--(void)youTubeView:(LBYouTubeView *)youTubeView didStopPlayingYouTubeVideo:(MPMoviePlaybackState)state {
-    NSLog(@"Did finish playing YouTube video");
 }
 
 @end
