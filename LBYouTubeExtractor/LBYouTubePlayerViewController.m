@@ -9,9 +9,6 @@
 #import "LBYouTubePlayerViewController.h"
 #import "JSONKit.h"
 
-#define USE_NATIVE_JSON_PARSER  1
-#define USE_NATIVE_UNESCAPE     1
-
 static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
 NSString* const kLBYouTubePlayerControllerErrorDomain = @"LBYouTubePlayerControllerErrorDomain";
 
@@ -104,16 +101,9 @@ NSInteger const LBYouTubePlayerControllerErrorCodeNoJSONData   =    3;
     [self.connection start];
 }
 
-/*
- Native:
- not very perfoming but more reliable
- Modified from http://stackoverflow.com/a/2099484/224629
- 
- Not native:
- Modified answer from StackOverflow http://stackoverflow.com/questions/2099349/using-objective-c-cocoa-to-unescape-unicode-characters-ie-u1234
- */
-- (NSString *)_unescapeString:(NSString *)string {
-#if USE_NATIVE_UNESCAPE
+// Modified answer from StackOverflow http://stackoverflow.com/questions/2099349/using-objective-c-cocoa-to-unescape-unicode-characters-ie-u1234
+
+-(NSString *)_unescapeString:(NSString *)string {
     // will cause trouble if you have "abc\\\\uvw"
     // \u   --->    \U
     NSString *esc1 = [string stringByReplacingOccurrencesOfString:@"\\u" withString:@"\\U"];
@@ -137,59 +127,6 @@ NSInteger const LBYouTubePlayerControllerErrorCodeNoJSONData   =    3;
     }
     
     return nil;
-#else
-    // tokenize based on unicode escape char
-    NSMutableString* tokenizedString = [NSMutableString string];
-    NSScanner* scanner = [NSScanner scannerWithString:string];
-    while ([scanner isAtEnd] == NO)
-    {
-        // read up to the first unicode marker
-        // if a string has been scanned, it's a token
-        // and should be appended to the tokenized string
-        NSString* token = @"";
-        [scanner scanUpToString:@"\\u" intoString:&token];
-        if (token != nil && token.length > 0)
-        {
-            [tokenizedString appendString:token];
-            continue;
-        }
-        
-        // skip two characters to get past the marker
-        // check if the range of unicode characters is
-        // beyond the end of the string (could be malformed)
-        // and if it is, move the scanner to the end
-        // and skip this token
-        NSUInteger location = [scanner scanLocation];
-        NSInteger extra = scanner.string.length - location - 4 - 2;
-        if (extra < 0)
-        {
-            NSRange range = {location, -extra};
-            [tokenizedString appendString:[scanner.string substringWithRange:range]];
-            [scanner setScanLocation:location - extra];
-            continue;
-        }
-        
-        // move the location pas the unicode marker
-        // then read in the next 4 characters
-        location += 2;
-        NSRange range = {location, 4};
-        token = [scanner.string substringWithRange:range];
-        
-        // we don't need non-ascii because it would break the json (only intrested in urls) 
-        if (token.intValue) {
-            unichar codeValue = (unichar) strtol([token UTF8String], NULL, 16);
-            [tokenizedString appendString:[NSString stringWithFormat:@"%C", codeValue]];
-        }
-        
-        // move the scanner past the 4 characters
-        // then keep scanning
-        location += 4;
-        [scanner setScanLocation:location];
-    }
-    
-    NSString* retString = [tokenizedString stringByReplacingOccurrencesOfString:@"\\\\\"" withString:@""];
-    return [retString stringByReplacingOccurrencesOfString:@"\\" withString:@""];
-#endif
 }
 
 -(NSURL*)_extractYouTubeURLFromFile:(NSString *)html error:(NSError *__autoreleasing *)error {
@@ -209,7 +146,6 @@ NSInteger const LBYouTubePlayerControllerErrorCodeNoJSONData   =    3;
         NSString *JSON = nil;
         [scanner scanUpToString:@"\");" intoString:&JSON];  
         JSON = [self _unescapeString:JSON];
-        
         NSError* decodingError = nil;
         NSDictionary* JSONCode = [NSJSONSerialization JSONObjectWithData:[JSON dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&decodingError];
         
