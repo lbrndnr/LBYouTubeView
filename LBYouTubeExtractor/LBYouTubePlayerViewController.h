@@ -14,17 +14,23 @@ extern NSInteger const LBYouTubePlayerControllerErrorCodeInvalidHTML;
 extern NSInteger const LBYouTubePlayerControllerErrorCodeNoStreamURL;
 extern NSInteger const LBYouTubePlayerControllerErrorCodeNoJSONData;
 
+typedef enum {
+    LBYouTubePlayerQualitySmall       = 0,
+    LBYouTubePlayerQualityMedium   = 1,
+    LBYouTubePlayerQualityLarge    = 2,
+} LBYouTubePlayerQuality;
+
 @protocol LBYouTubePlayerControllerDelegate;
 
 @interface LBYouTubePlayerViewController : NSObject {
-    BOOL highQuality;
+    LBYouTubePlayerQuality quality;
     NSURL* youTubeURL;
     NSURL* extractedURL;
     LBYouTubePlayerController* view;
     id <LBYouTubePlayerControllerDelegate> __unsafe_unretained delegate;
 }
 
-@property (nonatomic) BOOL highQuality;
+@property (nonatomic) LBYouTubePlayerQuality quality;
 @property (nonatomic, strong, readonly) NSURL* youTubeURL;
 @property (nonatomic, strong, readonly) NSURL *extractedURL;
 @property (nonatomic, strong, readonly) LBYouTubePlayerController* view;

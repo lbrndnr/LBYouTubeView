@@ -43,7 +43,7 @@ NSInteger const LBYouTubePlayerControllerErrorCodeNoJSONData   =    3;
 @end
 @implementation LBYouTubePlayerViewController
 
-@synthesize youTubeURL, highQuality, extractedURL, view, delegate, buffer, connection;
+@synthesize youTubeURL, quality, extractedURL, view, delegate, buffer, connection;
 
 #pragma mark
 
@@ -76,7 +76,6 @@ NSInteger const LBYouTubePlayerControllerErrorCodeNoJSONData   =    3;
 
 -(void)_setupWithYouTubeURL:(NSURL *)URL {
     self.youTubeURL = URL;
-    self.highQuality = NO;
     self.extractedURL = nil;
     self.view = nil;
     self.delegate = nil;
@@ -157,18 +156,21 @@ NSInteger const LBYouTubePlayerControllerErrorCodeNoJSONData   =    3;
         else {
             // Success
             
-            NSDictionary* video = [[JSONCode objectForKey:@"content"] objectForKey:@"video"];
+            NSArray* videos = [[[JSONCode objectForKey:@"content"] objectForKey:@"video"] objectForKey:@"fmt_stream_map"];
             NSString* streamURL = nil;
-            NSString* streamURLKey = @"stream_url";
-            
-            if (self.highQuality) {
-                streamURL = [video objectForKey:[NSString stringWithFormat:@"hq_%@", streamURLKey]];
-                if (!streamURL) {
-                    streamURL = [video objectForKey:streamURLKey];
+            if (videos.count) {
+                NSString* streamURLKey = @"url";
+                
+                if (self.quality == LBYouTubePlayerQualityLarge) {
+                    streamURL = [[videos objectAtIndex:0] objectForKey:streamURLKey];
                 }
-            }
-            else {
-                streamURL = [video objectForKey:streamURLKey];
+                else if (self.quality == LBYouTubePlayerQualityMedium) {
+                    unsigned int index = MAX(0, videos.count-2);
+                    streamURL = [[videos objectAtIndex:index] objectForKey:streamURLKey];
+                }
+                else {
+                    streamURL = [[videos lastObject] objectForKey:streamURLKey];
+                }
             }
             
             if (streamURL) {

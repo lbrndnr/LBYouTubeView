@@ -22,7 +22,7 @@
 	
     self.controller = [[LBYouTubePlayerViewController alloc] initWithYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"]];
     self.controller.delegate = self;
-    self.controller.highQuality = YES;
+    self.controller.quality = LBYouTubePlayerQualityLarge;
     self.controller.view.frame = CGRectMake(0.0f, 0.0f, 200.0f, 200.0f);
     self.controller.view.center = self.view.center;
     [self.view addSubview:self.controller.view];
