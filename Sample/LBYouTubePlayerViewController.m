@@ -188,6 +188,8 @@ NSInteger const LBYouTubePlayerControllerErrorCodeNoJSONData   =    3;
                 return [NSURL URLWithString:streamURL];
             }
             else {
+                // Give it another shot and just look for a video URL that might match
+                
                 *error = [NSError errorWithDomain:kLBYouTubePlayerControllerErrorDomain code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]];
             }
         }
