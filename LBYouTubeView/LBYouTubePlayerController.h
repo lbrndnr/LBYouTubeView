@@ -10,10 +10,10 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 @interface LBYouTubePlayerController : UIView {
-    MPMoviePlayerController* controller;
+    MPMoviePlayerController* videoController;
 }
 
-@property (nonatomic, strong, readonly) MPMoviePlayerController* controller;
+@property (nonatomic, strong, readonly) MPMoviePlayerController* videoController;
 
 -(void)loadYouTubeVideo:(NSURL*)URL;
 

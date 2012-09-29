@@ -10,14 +10,14 @@
 
 @interface LBYouTubePlayerController () 
 
-@property (nonatomic, strong) MPMoviePlayerController* controller;
+@property (nonatomic, strong) MPMoviePlayerController* videoController;
 
 -(void)_setup;
 
 @end
 @implementation LBYouTubePlayerController
 
-@synthesize controller;
+@synthesize videoController;
 
 #pragma mark Initialization
 
@@ -53,15 +53,15 @@
 #pragma mark Other Methods
 
 -(void)loadYouTubeVideo:(NSURL *)URL {
-    if (self.controller) {
-        [self.controller.view removeFromSuperview];
+    if (self.videoController) {
+        [self.videoController.view removeFromSuperview];
     }
     
-    self.controller = [[MPMoviePlayerController alloc] initWithContentURL:URL];
-    [self.controller prepareToPlay];
-    self.controller.view.frame = self.bounds;
-    self.controller.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [self addSubview:self.controller.view];
+    self.videoController = [[MPMoviePlayerController alloc] initWithContentURL:URL];
+    [self.videoController prepareToPlay];
+    self.videoController.view.frame = self.bounds;
+    self.videoController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self addSubview:self.videoController.view];
 }
 
 #pragma mark -
