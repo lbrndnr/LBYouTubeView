@@ -37,7 +37,6 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 
 -(NSString*)_unescapeString:(NSString*)string;
 -(NSURL*)_extractYouTubeURLFromFile:(NSString*)html error:(NSError**)error;
--(void)_loadVideoWithContentOfURL:(NSURL*)videoURL;
 
 -(void)_didSuccessfullyExtractYouTubeURL:(NSURL*)videoURL;
 -(void)_failedExtractingYouTubeURLWithError:(NSError*)error;
@@ -45,7 +44,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 @end
 @implementation LBYouTubeExtractor
 
-@synthesize youTubeURL, extractedURL, quality, connection, buffer;
+@synthesize youTubeURL, extractedURL, delegate, quality, connection, buffer;
 
 #pragma mark Initialization
 
