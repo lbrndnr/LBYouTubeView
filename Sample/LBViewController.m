@@ -7,7 +7,7 @@
 //
 
 #import "LBViewController.h"
-#import "LBYouTubePlayerViewController.h"
+#import "LBYouTube.h"
 
 @implementation LBViewController
 
