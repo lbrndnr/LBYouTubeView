@@ -9,33 +9,26 @@ How does it work? It just loads the HTML code of YouTube's mobile website and lo
 LBYouTubeView is dead simple. Just add an instance as a subview to a UIViewControllers view and tell it, what video it should load.
 
 ## Installation
-1. Drag into your your project `LBYouTubeExtractor` folder, `LBYouTubeView` folder and `Submodules/JSONKit` folder.
+1. Drag the `LBYouTubeView` folder into your project.
 2. Import the `MediaPlayer.framework`.
-3. Set `-fno-objc-arc` compiler flag to `JSONKit.m`.
+3. If you need to support iOS 4, add `JSONKit` to your project and set `-fno-objc-arc` compiler flag to `JSONKit.m`.
 
 ### Example
 
 ```objc
-LBYouTubeView *youTubeView = [[LBYouTubeView alloc] initWithFrame:self.view.bounds];
-youTubeView.delegate = self;
-youTubeView.highQuality = YES;
-[self.view addSubview:youTubeView];
-[youTubeView loadYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"]];
-[youTubeView play];
+LBYouTubePlayerViewController* controller = [[LBYouTubePlayerViewController alloc] initWithYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"] quality:LBYouTubeVideoQualityLarge];
+controller.delegate = self;
+controller.view.frame = CGRectMake(0.0f, 0.0f, 200.0f, 200.0f);
+controller.view.center = self.view.center;
+[self.view addSubview:self.controller.view];
 ```
 
-You can also only extract video URL without to use `LBYouTubeView` directly:
+You can also only extract video URL without to use `LBYouTubePlayerViewController` directly:
 
 ```objc
-LBYouTubeExtractor *extractor = [[LBYouTubeExtractor alloc] init];
-extractor.completionHandler = ^(NSURL *extractedURL, NSError *error) {
-	// Do something with extractedURL...
-};
-
-extractor.highQuality = YES;
-extractor.youTubeURL = [NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"];
-
-[extractor start];
+LBYouTubeExtractor* extractor = [[LBYouTubeExtractor alloc] initWithURL:URL quality:quality];
+extractor.delegate = self;
+[extractor startExtracting];
 ```
 
 ## Requirements
