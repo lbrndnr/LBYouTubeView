@@ -11,7 +11,7 @@
 
 static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
 
-NSString* const kLBYouTubePlayerExtractorErrorDomain = @"LBYouTubePlayerExtractorErrorDomain";
+NSString* const kLBYouTubePlayerExtractorErrorDomain = @"LBYouTubeExtractorErrorDomain";
 
 NSInteger const LBYouTubePlayerExtractorErrorCodeInvalidHTML  =    1;
 NSInteger const LBYouTubePlayerExtractorErrorCodeNoStreamURL  =    2;
@@ -145,11 +145,12 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
     NSString *JSONStart = nil;
     NSString *JSONStartFull = @"ls.setItem('PIGGYBACK_DATA', \")]}'";
     NSString *JSONStartShrunk = [JSONStartFull stringByReplacingOccurrencesOfString:@" " withString:@""];
-    if ([html rangeOfString:JSONStartFull].location != NSNotFound)
+    if ([html rangeOfString:JSONStartFull].location != NSNotFound) {
         JSONStart = JSONStartFull;
-    else if ([html rangeOfString:JSONStartShrunk].location != NSNotFound)
+    }
+    else if ([html rangeOfString:JSONStartShrunk].location != NSNotFound) {
         JSONStart = JSONStartShrunk;
-    
+    }
     if (JSONStart != nil) {
         NSScanner* scanner = [NSScanner scannerWithString:html];
         [scanner scanUpToString:JSONStart intoString:nil];
@@ -189,7 +190,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
                     streamURL = [[videos objectAtIndex:0] objectForKey:streamURLKey];
                 }
                 else if (self.quality == LBYouTubeVideoQualityMedium) {
-                    unsigned int index = MAX(0, videos.count-2);
+                    unsigned int index = MIN(videos.count-1, 1);
                     streamURL = [[videos objectAtIndex:index] objectForKey:streamURLKey];
                 }
                 else {
@@ -248,7 +249,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 -(void)connectionDidFinishLoading:(NSURLConnection *) connection {
     NSString* html = [[NSString alloc] initWithData:self.buffer encoding:NSUTF8StringEncoding];
     [self _closeConnection];
-    
+
     if (html.length <= 0) {
         [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:1 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't download the HTML source code. URL might be invalid." forKey:NSLocalizedDescriptionKey]]];
         return;

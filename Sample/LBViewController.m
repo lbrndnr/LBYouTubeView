@@ -7,7 +7,6 @@
 //
 
 #import "LBViewController.h"
-#import "LBYouTube.h"
 
 @implementation LBViewController
 
@@ -20,7 +19,7 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
 	
-    self.controller = [[LBYouTubePlayerViewController alloc] initWithYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"] quality:LBYouTubeVideoQualityLarge];
+    self.controller = [[LBYouTubePlayerController alloc] initWithYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"] quality:LBYouTubeVideoQualityLarge];
     self.controller.delegate = self;
     self.controller.view.frame = CGRectMake(0.0f, 0.0f, 200.0f, 200.0f);
     self.controller.view.center = self.view.center;
@@ -34,11 +33,11 @@
 #pragma mark - 
 #pragma mark LBYouTubePlayerViewControllerDelegate
 
--(void)youTubePlayerViewController:(LBYouTubePlayerViewController *)controller didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
+-(void)youTubePlayerViewController:(LBYouTubePlayerController *)controller didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
     NSLog(@"Did extract video source:%@", videoURL);
 }
 
--(void)youTubePlayerViewController:(LBYouTubePlayerViewController *)controller failedExtractingYouTubeURLWithError:(NSError *)error {
+-(void)youTubePlayerViewController:(LBYouTubePlayerController *)controller failedExtractingYouTubeURLWithError:(NSError *)error {
     NSLog(@"Failed loading video due to error:%@", error);
 }
 
