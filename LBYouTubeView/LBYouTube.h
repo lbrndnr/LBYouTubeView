@@ -7,5 +7,4 @@
 //
 
 #import "LBYouTubePlayerController.h"
-#import "LBYouTubePlayerViewController.h"
 #import "LBYouTubeExtractor.h"
