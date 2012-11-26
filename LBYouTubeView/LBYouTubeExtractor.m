@@ -75,9 +75,11 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
         NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:self.youTubeURL];
         [request setValue:kUserAgent forHTTPHeaderField:@"User-Agent"];
         
-        self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-        [self.connection start];
-    } 
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+            [self.connection start];
+        });
+    }
 }
 
 -(void)stopExtracting {
