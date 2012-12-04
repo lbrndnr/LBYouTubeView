@@ -6,10 +6,12 @@
 //
 //
 
+#import <UIKit/UIKit.h>
 #import "LBYouTubeExtractor.h"
 #import "JSONKit.h"
 
-static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
+static NSString* kUserAgent = nil;
+
 
 NSString* const kLBYouTubePlayerExtractorErrorDomain = @"LBYouTubeExtractorErrorDomain";
 
@@ -47,6 +49,12 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 @synthesize youTubeURL, extractedURL, delegate, quality, connection, buffer;
 
 #pragma mark Initialization
+
++(void)initialize {
+    // Set the user agent for this device
+    UIWebView* webView = [[UIWebView alloc] initWithFrame:CGRectZero];
+    kUserAgent = [webView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
+}
 
 -(id)initWithURL:(NSURL *)videoURL quality:(LBYouTubeVideoQuality)videoQuality {
     self = [super init];
