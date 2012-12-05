@@ -19,10 +19,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeInvalidHTML  =    1;
 NSInteger const LBYouTubePlayerExtractorErrorCodeNoStreamURL  =    2;
 NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 
-@interface LBYouTubeExtractor () {
-    NSURLConnection* connection;
-    NSMutableData* buffer;
-}
+@interface LBYouTubeExtractor ()
 
 @property (nonatomic, strong) NSURLConnection* connection;
 @property (nonatomic, strong) NSMutableData* buffer;
@@ -45,8 +42,6 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 
 @end
 @implementation LBYouTubeExtractor
-
-@synthesize youTubeURL, extractedURL, delegate, quality, connection, buffer;
 
 #pragma mark Initialization
 
@@ -89,7 +84,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
         [request setValue:kUserAgent forHTTPHeaderField:@"User-Agent"];
         
         self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-        [connection start];
+        [self.connection start];
     }
 }
 

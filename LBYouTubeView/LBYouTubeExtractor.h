@@ -21,12 +21,7 @@ typedef enum {
 
 @protocol LBYouTubeExtractorDelegate;
 
-@interface LBYouTubeExtractor : NSObject {
-    LBYouTubeVideoQuality quality;
-    NSURL* youTubeURL;
-    NSURL* extractedURL;
-    id <LBYouTubeExtractorDelegate> __unsafe_unretained delegate;
-}
+@interface LBYouTubeExtractor : NSObject
 
 @property (nonatomic, readonly) LBYouTubeVideoQuality quality;
 @property (nonatomic, strong, readonly) NSURL* youTubeURL;
