@@ -13,6 +13,8 @@ extern NSInteger const LBYouTubePlayerExtractorErrorCodeInvalidHTML;
 extern NSInteger const LBYouTubePlayerExtractorErrorCodeNoStreamURL;
 extern NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData;
 
+typedef void (^LBYouTubeExtractorCompletionBlock)(NSURL *videoURL, NSError *error);
+
 typedef enum {
     LBYouTubeVideoQualitySmall    = 0,
     LBYouTubeVideoQualityMedium   = 1,
@@ -32,12 +34,15 @@ typedef enum {
 @property (nonatomic, strong, readonly) NSURL* youTubeURL;
 @property (nonatomic, strong, readonly) NSURL *extractedURL;
 @property (nonatomic, unsafe_unretained) IBOutlet id <LBYouTubeExtractorDelegate> delegate;
+@property (nonatomic, strong) LBYouTubeExtractorCompletionBlock completionBlock;
 
 -(id)initWithURL:(NSURL*)videoURL quality:(LBYouTubeVideoQuality)quality;
 -(id)initWithID:(NSString*)videoID quality:(LBYouTubeVideoQuality)quality;
 
 -(void)startExtracting;
 -(void)stopExtracting;
+
+- (void)extractVideoURLWithCompletionBlock:(LBYouTubeExtractorCompletionBlock)completionBlock;
 
 @end
 @protocol LBYouTubeExtractorDelegate <NSObject>

@@ -89,6 +89,11 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
     [self _closeConnection];
 }
 
+- (void)extractVideoURLWithCompletionBlock:(LBYouTubeExtractorCompletionBlock)completionBlock {
+    self.completionBlock = completionBlock;
+    [self startExtracting];
+}
+
 #pragma mark -
 #pragma mark Memory
 
@@ -219,11 +224,19 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
     if (self.delegate) {
         [self.delegate youTubeExtractor:self didSuccessfullyExtractYouTubeURL:videoURL];
     }
+
+    if(self.completionBlock) {
+        self.completionBlock(videoURL, nil);
+    }
 }
 
 -(void)_failedExtractingYouTubeURLWithError:(NSError *)error {
     if (self.delegate) {
         [self.delegate youTubeExtractor:self failedExtractingYouTubeURLWithError:error];
+    }
+
+    if(self.completionBlock) {
+        self.completionBlock(nil, error);
     }
 }
 
