@@ -175,14 +175,14 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
                 NSString* streamURLKey = @"url";
                 
                 if (self.quality == LBYouTubeVideoQualityLarge) {
-                    streamURL = [[videos objectAtIndex:0] objectForKey:streamURLKey];
+                    streamURL = videos[0][streamURLKey];
                 }
                 else if (self.quality == LBYouTubeVideoQualityMedium) {
                     unsigned int index = MIN(videos.count-1, 1);
-                    streamURL = [[videos objectAtIndex:index] objectForKey:streamURLKey];
+                    streamURL = videos[index][streamURLKey];
                 }
                 else {
-                    streamURL = [[videos lastObject] objectForKey:streamURLKey];
+                    streamURL = [videos lastObject][streamURLKey];
                 }
             }
             
@@ -243,7 +243,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
     [self _closeConnection];
 
     if (html.length <= 0) {
-        [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:1 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't download the HTML source code. URL might be invalid." forKey:NSLocalizedDescriptionKey]]];
+        [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey: @"Couldn't download the HTML source code. URL might be invalid."}]];
         return;
     }
     
