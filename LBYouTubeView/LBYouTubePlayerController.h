@@ -26,6 +26,7 @@
 @end
 @protocol LBYouTubePlayerControllerDelegate <NSObject>
 
+-(void)youTubePlayerViewControllerPreparedToPlayMedia:(LBYouTubePlayerController *)controller;
 -(void)youTubePlayerViewController:(LBYouTubePlayerController *)controller didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL;
 -(void)youTubePlayerViewController:(LBYouTubePlayerController *)controller failedExtractingYouTubeURLWithError:(NSError *)error;
 

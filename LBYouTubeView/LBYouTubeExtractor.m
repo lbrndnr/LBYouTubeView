@@ -7,7 +7,6 @@
 //
 
 #import "LBYouTubeExtractor.h"
-#import "JSONKit.h"
 
 static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
 
@@ -163,25 +162,14 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
         NSDictionary* JSONCode = nil;
         
         // First try to invoke NSJSONSerialization (Thanks Mattt Thompson)
-        
-        id NSJSONSerializationClass = NSClassFromString(@"NSJSONSerialization");
-        SEL NSJSONSerializationSelector = NSSelectorFromString(@"dataWithJSONObject:options:error:");
-        if (NSJSONSerializationClass && [NSJSONSerializationClass respondsToSelector:NSJSONSerializationSelector]) {
-            JSONCode = [NSJSONSerialization JSONObjectWithData:[JSON dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&decodingError];
-        }
-        else {
-            JSONCode = [JSON objectFromJSONStringWithParseOptions:JKParseOptionNone error:&decodingError];
-        }
+        JSONCode = [NSJSONSerialization JSONObjectWithData:[JSON dataUsingEncoding:NSUTF8StringEncoding]
+                                                   options:NSJSONReadingAllowFragments error:&decodingError];
         
         if (decodingError) {
-            // Failed
-            
             *error = decodingError;
         }
         else {
-            // Success
-            
-            NSArray* videos = [[[JSONCode objectForKey:@"content"] objectForKey:@"video"] objectForKey:@"fmt_stream_map"];
+            NSArray* videos = JSONCode[@"content"][@"video"][@"fmt_stream_map"];
             NSString* streamURL = nil;
             if (videos.count) {
                 NSString* streamURLKey = @"url";
@@ -204,12 +192,16 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
             else {
                 // Give it another shot and just look for a video URL that might match
                 
-                *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]];
+                *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain
+                                             code:2
+                                         userInfo:@{NSLocalizedDescriptionKey:@"Couldn't find the stream URL."}];
             }
         }
     }
     else {
-        *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:3 userInfo:[NSDictionary dictionaryWithObject:@"The JSON data could not be found." forKey:NSLocalizedDescriptionKey]];
+        *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain
+                                     code:3
+                                 userInfo:@{NSLocalizedDescriptionKey:@"The JSON data could not be found."}];
     }
     
     return nil;

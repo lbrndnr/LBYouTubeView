@@ -35,9 +35,15 @@
 -(id)initWithYouTubeID:(NSString *)youTubeID quality:(LBYouTubeVideoQuality)quality {
     self = [super init];
     if (self) {
-        [self _setupWithYouTubeURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", youTubeID]] quality:quality];
+        NSURL *youtubeURL = [NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", youTubeID]];
+        [self _setupWithYouTubeURL:youtubeURL quality:quality];
     }
     return self;
+}
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void)_setupWithYouTubeURL:(NSURL *)URL quality:(LBYouTubeVideoQuality)quality {
@@ -50,6 +56,13 @@
 
 #pragma mark -
 #pragma mark Delegate Calls
+
+-(void)_preparedToPlayMedia:(NSURL *)videoURL {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if ([self.delegate respondsToSelector:@selector(youTubePlayerViewControllerPreparedToPlayMedia:)]) {
+        [self.delegate youTubePlayerViewControllerPreparedToPlayMedia:self];
+    }
+}
 
 -(void)_didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
     if ([self.delegate respondsToSelector:@selector(youTubePlayerViewController:didSuccessfullyExtractYouTubeURL:)]) {
@@ -71,6 +84,12 @@
     
     self.contentURL = videoURL;
     [self play];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_preparedToPlayMedia:)
+                                                 name:MPMediaPlaybackIsPreparedToPlayDidChangeNotification
+                                               object:nil];
+    
 }
 
 -(void)youTubeExtractor:(LBYouTubeExtractor *)extractor failedExtractingYouTubeURLWithError:(NSError *)error {
