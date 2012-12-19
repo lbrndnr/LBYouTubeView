@@ -7,7 +7,7 @@
 //
 
 #import "LBYouTubeExtractor.h"
-#import "JSONKit.h"
+//#import "JSONKit.h"
 
 static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
 
@@ -89,6 +89,11 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
     [self _closeConnection];
 }
 
+- (void)extractVideoURLWithCompletionBlock:(LBYouTubeExtractorCompletionBlock)completionBlock {
+    self.completionBlock = completionBlock;
+    [self startExtracting];
+}
+
 #pragma mark -
 #pragma mark Memory
 
@@ -162,17 +167,8 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
         NSError* decodingError = nil;
         NSDictionary* JSONCode = nil;
         
-        // First try to invoke NSJSONSerialization (Thanks Mattt Thompson)
-        
-        id NSJSONSerializationClass = NSClassFromString(@"NSJSONSerialization");
-        SEL NSJSONSerializationSelector = NSSelectorFromString(@"dataWithJSONObject:options:error:");
-        if (NSJSONSerializationClass && [NSJSONSerializationClass respondsToSelector:NSJSONSerializationSelector]) {
-            JSONCode = [NSJSONSerialization JSONObjectWithData:[JSON dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&decodingError];
-        }
-        else {
-            JSONCode = [JSON objectFromJSONStringWithParseOptions:JKParseOptionNone error:&decodingError];
-        }
-        
+        JSONCode = [NSJSONSerialization JSONObjectWithData:[JSON dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&decodingError];
+
         if (decodingError) {
             // Failed
             
@@ -219,11 +215,19 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
     if (self.delegate) {
         [self.delegate youTubeExtractor:self didSuccessfullyExtractYouTubeURL:videoURL];
     }
+
+    if(self.completionBlock) {
+        self.completionBlock(videoURL, nil);
+    }
 }
 
 -(void)_failedExtractingYouTubeURLWithError:(NSError *)error {
     if (self.delegate) {
         [self.delegate youTubeExtractor:self failedExtractingYouTubeURLWithError:error];
+    }
+
+    if(self.completionBlock) {
+        self.completionBlock(nil, error);
     }
 }
 
