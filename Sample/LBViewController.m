@@ -18,7 +18,24 @@
 
 -(void)viewDidLoad {
     [super viewDidLoad];
-	
+
+    // This is just a demonstration of how you would extract
+    // a video URL using block-based syntax. It has no function
+    // in the demo app, other than it logs the extracted URL
+    // to the console, as you can see here:
+
+    LBYouTubeExtractor *extractor = [[LBYouTubeExtractor alloc] initWithURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=WVTzEq53-PI"] quality:LBYouTubeVideoQualityLarge];
+
+    [extractor extractVideoURLWithCompletionBlock:^(NSURL *videoURL, NSError *error) {
+        if(!error) {
+            NSLog(@"Did extract video URL using completion block: %@", videoURL);
+        } else {
+            NSLog(@"Failed extracting video URL using block due to error:%@", error);
+        }
+    }];
+
+    // Setup the player controller and add it's view as a subview:
+
     self.controller = [[LBYouTubePlayerController alloc] initWithYouTubeURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"] quality:LBYouTubeVideoQualityLarge];
     self.controller.delegate = self;
     self.controller.view.frame = CGRectMake(0.0f, 0.0f, 200.0f, 200.0f);
