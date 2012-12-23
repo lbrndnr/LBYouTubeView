@@ -17,10 +17,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeInvalidHTML  =    1;
 NSInteger const LBYouTubePlayerExtractorErrorCodeNoStreamURL  =    2;
 NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 
-@interface LBYouTubeExtractor () {
-    NSURLConnection* connection;
-    NSMutableData* buffer;
-}
+@interface LBYouTubeExtractor ()
 
 @property (nonatomic, strong) NSURLConnection* connection;
 @property (nonatomic, strong) NSMutableData* buffer;
@@ -43,8 +40,6 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 
 @end
 @implementation LBYouTubeExtractor
-
-@synthesize youTubeURL, extractedURL, delegate, quality, connection, buffer;
 
 #pragma mark Initialization
 
@@ -80,8 +75,10 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
         NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:self.youTubeURL];
         [request setValue:kUserAgent forHTTPHeaderField:@"User-Agent"];
         
-        self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-        [connection start];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+            [self.connection start];
+        });
     }
 }
 
@@ -186,7 +183,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
                     streamURL = [[videos objectAtIndex:0] objectForKey:streamURLKey];
                 }
                 else if (self.quality == LBYouTubeVideoQualityMedium) {
-                    unsigned int index = MIN(videos.count-1, 1);
+                    unsigned int index = (unsigned int)MIN(videos.count-1, 1);
                     streamURL = [[videos objectAtIndex:index] objectForKey:streamURLKey];
                 }
                 else {
@@ -237,7 +234,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     NSUInteger capacity;
     if (response.expectedContentLength != NSURLResponseUnknownLength) {
-        capacity = response.expectedContentLength;
+        capacity = (NSUInteger)response.expectedContentLength;
     }
     else {
         capacity = 0;
