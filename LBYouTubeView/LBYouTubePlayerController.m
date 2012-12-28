@@ -43,6 +43,7 @@
 
 -(void)dealloc
 {
+    self.extractor.delegate = nil;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
