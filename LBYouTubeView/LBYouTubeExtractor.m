@@ -97,6 +97,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 
 -(void)dealloc {
     [self _closeConnection];
+    self.delegate = nil;
 }
 
 #pragma mark -
