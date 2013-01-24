@@ -185,7 +185,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
                     streamURL = [[videos objectAtIndex:0] objectForKey:streamURLKey];
                 }
                 else if (self.quality == LBYouTubeVideoQualityMedium) {
-                    unsigned int index = MIN(videos.count-1, 1);
+                    unsigned int index = MIN(videos.count-1, 1U);
                     streamURL = [[videos objectAtIndex:index] objectForKey:streamURLKey];
                 }
                 else {
@@ -234,7 +234,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 #pragma mark NSURLConnectionDelegate
 
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    NSUInteger capacity;
+    long long capacity;
     if (response.expectedContentLength != NSURLResponseUnknownLength) {
         capacity = response.expectedContentLength;
     }
