@@ -25,11 +25,15 @@
 #pragma mark Initialization
 
 -(id)initWithYouTubeURL:(NSURL *)URL quality:(LBYouTubeVideoQuality)quality {
-    self = [super init];
-    if (self) {
-        [self _setupWithYouTubeURL:URL quality:quality];
+    NSMutableDictionary* parameters = [NSMutableDictionary new];
+    for (NSString* parameter in [URL.query componentsSeparatedByString:@"&"]) {
+        NSArray* pair = [parameter componentsSeparatedByString:@"="];
+        if([pair count] == 2) {
+            [parameters setObject:pair[1] forKey:pair[0]];
+        }
     }
-    return self;
+    
+    return [self initWithYouTubeID:parameters[@"v"] quality:quality];
 }
 
 -(id)initWithYouTubeID:(NSString *)youTubeID quality:(LBYouTubeVideoQuality)quality {
@@ -41,6 +45,7 @@
 }
 
 -(void)_setupWithYouTubeURL:(NSURL *)URL quality:(LBYouTubeVideoQuality)quality {
+    NSLog(@"%@", URL);
     self.delegate = nil;
     
     self.extractor = [[LBYouTubeExtractor alloc] initWithURL:URL quality:quality];
