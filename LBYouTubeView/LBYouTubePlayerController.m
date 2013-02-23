@@ -20,8 +20,6 @@
 @end
 @implementation LBYouTubePlayerController
 
-@synthesize delegate, extractor;
-
 #pragma mark Initialization
 
 -(id)initWithYouTubeURL:(NSURL *)URL quality:(LBYouTubeVideoQuality)quality {

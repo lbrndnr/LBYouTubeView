@@ -13,8 +13,6 @@
 @protocol LBYouTubePlayerControllerDelegate;
 
 @interface LBYouTubePlayerController : MPMoviePlayerController <LBYouTubeExtractorDelegate> {
-    LBYouTubeExtractor* extractor;
-    id <LBYouTubePlayerControllerDelegate> __unsafe_unretained delegate;
 }
 
 @property (nonatomic, strong, readonly) LBYouTubeExtractor* extractor;

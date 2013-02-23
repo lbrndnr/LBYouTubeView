@@ -6,9 +6,11 @@
 //
 //
 
+#import <UIKit/UIKit.h>
 #import "LBYouTubeExtractor.h"
 
-static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
+static NSString* kUserAgent = nil;
+
 
 NSString* const kLBYouTubePlayerExtractorErrorDomain = @"LBYouTubeExtractorErrorDomain";
 
@@ -16,10 +18,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeInvalidHTML  =    1;
 NSInteger const LBYouTubePlayerExtractorErrorCodeNoStreamURL  =    2;
 NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 
-@interface LBYouTubeExtractor () {
-    NSURLConnection* connection;
-    NSMutableData* buffer;
-}
+@interface LBYouTubeExtractor ()
 
 @property (nonatomic, strong) NSURLConnection* connection;
 @property (nonatomic, strong) NSMutableData* buffer;
@@ -43,9 +42,13 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 @end
 @implementation LBYouTubeExtractor
 
-@synthesize youTubeURL, extractedURL, delegate, quality, connection, buffer;
-
 #pragma mark Initialization
+
++(void)initialize {
+    // Set the user agent for this device
+    UIWebView* webView = [[UIWebView alloc] initWithFrame:CGRectZero];
+    kUserAgent = [webView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
+}
 
 -(id)initWithURL:(NSURL *)videoURL quality:(LBYouTubeVideoQuality)videoQuality {
     self = [super init];
@@ -80,7 +83,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
         [request setValue:kUserAgent forHTTPHeaderField:@"User-Agent"];
         
         self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-        [connection start];
+        [self.connection start];
     }
 }
 
@@ -98,6 +101,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 
 -(void)dealloc {
     [self _closeConnection];
+    self.delegate = nil;
 }
 
 #pragma mark -
@@ -198,13 +202,14 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
             }
             else {
                 // Give it another shot and just look for a video URL that might match
-                
-                *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]];
+                if (error)
+                    *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]];
             }
         }
     }
     else {
-        *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:3 userInfo:[NSDictionary dictionaryWithObject:@"The JSON data could not be found." forKey:NSLocalizedDescriptionKey]];
+        if (error)
+            *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:3 userInfo:[NSDictionary dictionaryWithObject:@"The JSON data could not be found." forKey:NSLocalizedDescriptionKey]];
     }
     
     return nil;
