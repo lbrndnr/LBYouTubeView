@@ -169,13 +169,9 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
         JSONCode = [NSJSONSerialization JSONObjectWithData:[JSON dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&decodingError];
 
         if (decodingError) {
-            // Failed
-            
             *error = decodingError;
         }
         else {
-            // Success
-            
             NSArray* videos = [[[JSONCode objectForKey:@"content"] objectForKey:@"video"] objectForKey:@"fmt_stream_map"];
             NSString* streamURL = nil;
             if (videos.count) {
@@ -197,8 +193,6 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
                 return [NSURL URLWithString:streamURL];
             }
             else {
-                // Give it another shot and just look for a video URL that might match
-                
                 *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]];
             }
         }
