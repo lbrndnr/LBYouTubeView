@@ -45,7 +45,6 @@
 }
 
 -(void)_setupWithYouTubeURL:(NSURL *)URL quality:(LBYouTubeVideoQuality)quality {
-    NSLog(@"%@", URL);
     self.delegate = nil;
     
     self.extractor = [[LBYouTubeExtractor alloc] initWithURL:URL quality:quality];

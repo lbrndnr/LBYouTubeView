@@ -146,9 +146,9 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 }
 
 -(NSURL*)_extractYouTubeURLFromFile:(NSString *)html error:(NSError *__autoreleasing *)error {
-    NSString *JSONStart = nil;
-    NSString *JSONStartFull = @"ls.setItem('PIGGYBACK_DATA', \")]}'";
-    NSString *JSONStartShrunk = [JSONStartFull stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSString* JSONStart = nil;
+    NSString* JSONStartFull = @"ls.setItem('PIGGYBACK_DATA', \")]}'";
+    NSString* JSONStartShrunk = [JSONStartFull stringByReplacingOccurrencesOfString:@" " withString:@""];
     if ([html rangeOfString:JSONStartFull].location != NSNotFound) {
         JSONStart = JSONStartFull;
     }
@@ -160,7 +160,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
         [scanner scanUpToString:JSONStart intoString:nil];
         [scanner scanString:JSONStart intoString:nil];
         
-        NSString *JSON = nil;
+        NSString* JSON = nil;
         [scanner scanUpToString:@"\");" intoString:&JSON];
         JSON = [self _unescapeString:JSON];
         NSError* decodingError = nil;
