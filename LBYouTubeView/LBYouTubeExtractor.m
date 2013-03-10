@@ -164,9 +164,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
         [scanner scanUpToString:@"\");" intoString:&JSON];
         JSON = [self _unescapeString:JSON];
         NSError* decodingError = nil;
-        NSDictionary* JSONCode = nil;
-        
-        JSONCode = [NSJSONSerialization JSONObjectWithData:[JSON dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&decodingError];
+        NSDictionary* JSONCode = [NSJSONSerialization JSONObjectWithData:[JSON dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&decodingError];
 
         if (decodingError) {
             *error = decodingError;
