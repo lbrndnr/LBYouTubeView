@@ -10,8 +10,6 @@
 
 @implementation LBViewController
 
-@synthesize controller;
-
 - (void)dealloc {
     self.controller.delegate = nil;
 }
