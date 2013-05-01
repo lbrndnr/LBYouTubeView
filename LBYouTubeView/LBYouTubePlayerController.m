@@ -51,13 +51,6 @@
 }
 
 #pragma mark -
-#pragma mark Memory
-
--(void)dealloc {
-    self.extractor.delegate = nil;
-}
-
-#pragma mark -
 #pragma mark Delegate Calls
 
 -(void)_didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
