@@ -89,13 +89,6 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 }
 
 #pragma mark -
-#pragma mark Memory
-
--(void)dealloc {
-    [self _closeConnection];
-}
-
-#pragma mark -
 #pragma mark Private
 
 -(void)_closeConnection {
