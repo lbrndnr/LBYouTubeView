@@ -16,6 +16,34 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeInvalidHTML  =    1;
 NSInteger const LBYouTubePlayerExtractorErrorCodeNoStreamURL  =    2;
 NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 
+// Modified answer from StackOverflow http://stackoverflow.com/questions/2099349/using-objective-c-cocoa-to-unescape-unicode-characters-ie-u1234
+
+static NSString *UnescapeString(NSString *string) {
+    // will cause trouble if you have "abc\\\\uvw"
+    // \u   --->    \U
+    NSString *esc1 = [string stringByReplacingOccurrencesOfString:@"\\u" withString:@"\\U"];
+    
+    // "    --->    \"
+    NSString *esc2 = [esc1 stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
+    
+    // \\"  --->    \"
+    NSString *esc3 = [esc2 stringByReplacingOccurrencesOfString:@"\\\\\"" withString:@"\\\""];
+    
+    NSString *quoted = [[@"\"" stringByAppendingString:esc3] stringByAppendingString:@"\""];
+    NSData *data = [quoted dataUsingEncoding:NSUTF8StringEncoding];
+    
+    //  NSPropertyListFormat format = 0;
+    //  NSString *errorDescr = nil;
+    NSString *unesc = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
+    
+    if ([unesc isKindOfClass:[NSString class]]) {
+        // \U   --->    \u
+        return [unesc stringByReplacingOccurrencesOfString:@"\\U" withString:@"\\u"];
+    }
+    
+    return nil;
+}
+
 @interface LBYouTubeExtractor ()
 
 @property (nonatomic, strong) NSURLConnection* connection;
@@ -69,39 +97,12 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 #pragma mark -
 #pragma mark Private
 
--(void)_closeConnection {
+-(void)closeConnection {
     [self.connection cancel];
     self.connection = nil;
     self.buffer = nil;
 }
 
-// Modified answer from StackOverflow http://stackoverflow.com/questions/2099349/using-objective-c-cocoa-to-unescape-unicode-characters-ie-u1234
-
--(NSString *)_unescapeString:(NSString *)string {
-    // will cause trouble if you have "abc\\\\uvw"
-    // \u   --->    \U
-    NSString *esc1 = [string stringByReplacingOccurrencesOfString:@"\\u" withString:@"\\U"];
-    
-    // "    --->    \"
-    NSString *esc2 = [esc1 stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
-    
-    // \\"  --->    \"
-    NSString *esc3 = [esc2 stringByReplacingOccurrencesOfString:@"\\\\\"" withString:@"\\\""];
-    
-    NSString *quoted = [[@"\"" stringByAppendingString:esc3] stringByAppendingString:@"\""];
-    NSData *data = [quoted dataUsingEncoding:NSUTF8StringEncoding];
-    
-    //  NSPropertyListFormat format = 0;
-    //  NSString *errorDescr = nil;
-    NSString *unesc = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
-    
-    if ([unesc isKindOfClass:[NSString class]]) {
-        // \U   --->    \u
-        return [unesc stringByReplacingOccurrencesOfString:@"\\U" withString:@"\\u"];
-    }
-    
-    return nil;
-}
 
 -(NSURL*)_extractYouTubeURLFromFile:(NSString *)html error:(NSError *__autoreleasing *)error {
     NSString* JSONStart = nil;
@@ -120,7 +121,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
         
         NSString* JSON = nil;
         [scanner scanUpToString:@"\");" intoString:&JSON];
-        JSON = [self _unescapeString:JSON];
+        JSON = UnescapeString(JSON);
         NSError* decodingError = nil;
         NSDictionary* JSONCode = [NSJSONSerialization JSONObjectWithData:[JSON dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&decodingError];
 
