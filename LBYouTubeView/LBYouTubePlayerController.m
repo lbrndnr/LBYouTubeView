@@ -18,32 +18,18 @@
 
 #pragma mark Initialization
 
--(id)initWithYouTubeURL:(NSURL *)URL quality:(LBYouTubeVideoQuality)quality {
-    NSMutableDictionary* parameters = [NSMutableDictionary new];
-    for (NSString* parameter in [URL.query componentsSeparatedByString:@"&"]) {
-        NSArray* pair = [parameter componentsSeparatedByString:@"="];
-        if([pair count] == 2) {
-            [parameters setObject:pair[1] forKey:pair[0]];
-        }
-    }
-    
-    return [self initWithYouTubeID:parameters[@"v"] quality:quality];
-}
-
--(id)initWithYouTubeID:(NSString *)youTubeID quality:(LBYouTubeVideoQuality)quality {
-    self = [super init];
+-(id)initWithYouTubeURL:(NSURL *)youTubeURL quality:(LBYouTubeVideoQuality)quality {
+    self = [super initWithContentURL:nil];
     if (self) {
-        [self _setupWithYouTubeURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", youTubeID]] quality:quality];
+        self.extractor = [[LBYouTubeExtractor alloc] initWithURL:youTubeURL quality:quality];
+        self.extractor.delegate = self;
+        [self.extractor startExtracting];
     }
     return self;
 }
 
--(void)_setupWithYouTubeURL:(NSURL *)URL quality:(LBYouTubeVideoQuality)quality {
-    self.delegate = nil;
-    
-    self.extractor = [[LBYouTubeExtractor alloc] initWithURL:URL quality:quality];
-    self.extractor.delegate = self;
-    [self.extractor startExtracting];
+-(id)initWithYouTubeID:(NSString *)youTubeID quality:(LBYouTubeVideoQuality)quality {
+    return [self initWithYouTubeURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", youTubeID]] quality:quality];
 }
 
 #pragma mark -
