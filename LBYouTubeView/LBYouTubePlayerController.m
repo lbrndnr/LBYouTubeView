@@ -12,12 +12,8 @@
 
 @property (nonatomic, strong) LBYouTubeExtractor* extractor;
 
--(void)_setupWithYouTubeURL:(NSURL*)URL quality:(LBYouTubeVideoQuality)quality;
-
--(void)_didSuccessfullyExtractYouTubeURL:(NSURL*)videoURL;
--(void)_failedExtractingYouTubeURLWithError:(NSError*)error;
-
 @end
+
 @implementation LBYouTubePlayerController
 
 #pragma mark Initialization

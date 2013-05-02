@@ -25,19 +25,8 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 @property (nonatomic, strong) NSURL* extractedURL;
 @property (nonatomic) LBYouTubeVideoQuality quality;
 
-
--(void)_setupWithURL:(NSURL*)URL quality:(LBYouTubeVideoQuality)quality;;
-
--(void)_closeConnection;
--(void)_startConnection;
-
--(NSString*)_unescapeString:(NSString*)string;
--(NSURL*)_extractYouTubeURLFromFile:(NSString*)html error:(NSError**)error;
-
--(void)_didSuccessfullyExtractYouTubeURL:(NSURL*)videoURL;
--(void)_failedExtractingYouTubeURLWithError:(NSError*)error;
-
 @end
+
 @implementation LBYouTubeExtractor
 
 #pragma mark Initialization
