@@ -9,9 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "LBYouTube.h"
 
-@interface LBViewController : UIViewController <LBYouTubePlayerControllerDelegate> {
-    LBYouTubePlayerController* controller;
-}
+@interface LBViewController : UIViewController <LBYouTubePlayerControllerDelegate>
 
 @property (nonatomic, strong) LBYouTubePlayerController* controller;
 

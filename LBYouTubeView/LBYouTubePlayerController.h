@@ -12,13 +12,10 @@
 
 @protocol LBYouTubePlayerControllerDelegate;
 
-@interface LBYouTubePlayerController : MPMoviePlayerController <LBYouTubeExtractorDelegate> {
-    LBYouTubeExtractor* extractor;
-    id <LBYouTubePlayerControllerDelegate> __unsafe_unretained delegate;
-}
+@interface LBYouTubePlayerController : MPMoviePlayerController <LBYouTubeExtractorDelegate>
 
 @property (nonatomic, strong, readonly) LBYouTubeExtractor* extractor;
-@property (nonatomic, unsafe_unretained) IBOutlet id <LBYouTubePlayerControllerDelegate> delegate;
+@property (nonatomic, weak) IBOutlet id <LBYouTubePlayerControllerDelegate> delegate;
 
 -(id)initWithYouTubeURL:(NSURL*)youTubeURL quality:(LBYouTubeVideoQuality)quality;
 -(id)initWithYouTubeID:(NSString*)youTubeID quality:(LBYouTubeVideoQuality)quality;

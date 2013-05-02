@@ -12,80 +12,42 @@
 
 @property (nonatomic, strong) LBYouTubeExtractor* extractor;
 
--(void)_setupWithYouTubeURL:(NSURL*)URL quality:(LBYouTubeVideoQuality)quality;
-
--(void)_didSuccessfullyExtractYouTubeURL:(NSURL*)videoURL;
--(void)_failedExtractingYouTubeURLWithError:(NSError*)error;
-
 @end
-@implementation LBYouTubePlayerController
 
-@synthesize delegate, extractor;
+@implementation LBYouTubePlayerController
 
 #pragma mark Initialization
 
--(id)initWithYouTubeURL:(NSURL *)URL quality:(LBYouTubeVideoQuality)quality {
-    NSMutableDictionary* parameters = [NSMutableDictionary new];
-    for (NSString* parameter in [URL.query componentsSeparatedByString:@"&"]) {
-        NSArray* pair = [parameter componentsSeparatedByString:@"="];
-        if([pair count] == 2) {
-            [parameters setObject:pair[1] forKey:pair[0]];
-        }
-    }
-    
-    return [self initWithYouTubeID:parameters[@"v"] quality:quality];
-}
-
--(id)initWithYouTubeID:(NSString *)youTubeID quality:(LBYouTubeVideoQuality)quality {
-    self = [super init];
+-(id)initWithYouTubeURL:(NSURL *)youTubeURL quality:(LBYouTubeVideoQuality)quality {
+    self = [super initWithContentURL:nil];
     if (self) {
-        [self _setupWithYouTubeURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", youTubeID]] quality:quality];
+        self.extractor = [[LBYouTubeExtractor alloc] initWithURL:youTubeURL quality:quality];
+        self.extractor.delegate = self;
+        [self.extractor startExtracting];
     }
     return self;
 }
 
--(void)_setupWithYouTubeURL:(NSURL *)URL quality:(LBYouTubeVideoQuality)quality {
-    self.delegate = nil;
-    
-    self.extractor = [[LBYouTubeExtractor alloc] initWithURL:URL quality:quality];
-    self.extractor.delegate = self;
-    [self.extractor startExtracting];
-}
-
-#pragma mark -
-#pragma mark Memory
-
--(void)dealloc {
-    self.extractor.delegate = nil;
-}
-
-#pragma mark -
-#pragma mark Delegate Calls
-
--(void)_didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
-    if ([self.delegate respondsToSelector:@selector(youTubePlayerViewController:didSuccessfullyExtractYouTubeURL:)]) {
-        [self.delegate youTubePlayerViewController:self didSuccessfullyExtractYouTubeURL:videoURL];
-    }
-}
-
--(void)_failedExtractingYouTubeURLWithError:(NSError *)error {
-    if ([self.delegate respondsToSelector:@selector(youTubePlayerViewController:failedExtractingYouTubeURLWithError:)]) {
-        [self.delegate youTubePlayerViewController:self failedExtractingYouTubeURLWithError:error];
-    }
+-(id)initWithYouTubeID:(NSString *)youTubeID quality:(LBYouTubeVideoQuality)quality {
+    return [self initWithYouTubeURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", youTubeID]] quality:quality];
 }
 
 #pragma mark -
 #pragma mark LBYouTubeExtractorDelegate
 
 -(void)youTubeExtractor:(LBYouTubeExtractor *)extractor didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
-    [self _didSuccessfullyExtractYouTubeURL:videoURL];
+    if ([self.delegate respondsToSelector:@selector(youTubePlayerViewController:didSuccessfullyExtractYouTubeURL:)]) {
+        [self.delegate youTubePlayerViewController:self didSuccessfullyExtractYouTubeURL:videoURL];
+    }
     
     self.contentURL = videoURL;
     [self play];
 }
 
 -(void)youTubeExtractor:(LBYouTubeExtractor *)extractor failedExtractingYouTubeURLWithError:(NSError *)error {
-    [self _failedExtractingYouTubeURLWithError:error];
+    if ([self.delegate respondsToSelector:@selector(youTubePlayerViewController:failedExtractingYouTubeURLWithError:)]) {
+        [self.delegate youTubePlayerViewController:self failedExtractingYouTubeURLWithError:error];
+    }
 }
 
 #pragma mark -
