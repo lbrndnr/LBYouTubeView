@@ -65,7 +65,10 @@
 				2B16696815722A920030C509 /* Frameworks */,
 				2B16696615722A920030C509 /* Products */,
 			);
+			indentWidth = 4;
 			sourceTree = "<group>";
+			tabWidth = 4;
+			usesTabs = 0;
 		};
 		2B16696615722A920030C509 /* Products */ = {
 			isa = PBXGroup;
