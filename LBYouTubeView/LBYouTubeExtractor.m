@@ -75,14 +75,6 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
     self.buffer = nil;
 }
 
--(void)_startConnection {
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:self.youTubeURL];
-    [request setValue:(NSString *)kUserAgent forHTTPHeaderField:@"User-Agent"];
-    
-    self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
-    [self.connection start];
-}
-
 // Modified answer from StackOverflow http://stackoverflow.com/questions/2099349/using-objective-c-cocoa-to-unescape-unicode-characters-ie-u1234
 
 -(NSString *)_unescapeString:(NSString *)string {
