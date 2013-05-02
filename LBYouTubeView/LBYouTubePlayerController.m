@@ -33,32 +33,21 @@
 }
 
 #pragma mark -
-#pragma mark Delegate Calls
-
--(void)_didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
-    if ([self.delegate respondsToSelector:@selector(youTubePlayerViewController:didSuccessfullyExtractYouTubeURL:)]) {
-        [self.delegate youTubePlayerViewController:self didSuccessfullyExtractYouTubeURL:videoURL];
-    }
-}
-
--(void)_failedExtractingYouTubeURLWithError:(NSError *)error {
-    if ([self.delegate respondsToSelector:@selector(youTubePlayerViewController:failedExtractingYouTubeURLWithError:)]) {
-        [self.delegate youTubePlayerViewController:self failedExtractingYouTubeURLWithError:error];
-    }
-}
-
-#pragma mark -
 #pragma mark LBYouTubeExtractorDelegate
 
 -(void)youTubeExtractor:(LBYouTubeExtractor *)extractor didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
-    [self _didSuccessfullyExtractYouTubeURL:videoURL];
+    if ([self.delegate respondsToSelector:@selector(youTubePlayerViewController:didSuccessfullyExtractYouTubeURL:)]) {
+        [self.delegate youTubePlayerViewController:self didSuccessfullyExtractYouTubeURL:videoURL];
+    }
     
     self.contentURL = videoURL;
     [self play];
 }
 
 -(void)youTubeExtractor:(LBYouTubeExtractor *)extractor failedExtractingYouTubeURLWithError:(NSError *)error {
-    [self _failedExtractingYouTubeURLWithError:error];
+    if ([self.delegate respondsToSelector:@selector(youTubePlayerViewController:failedExtractingYouTubeURLWithError:)]) {
+        [self.delegate youTubePlayerViewController:self failedExtractingYouTubeURLWithError:error];
+    }
 }
 
 #pragma mark -
