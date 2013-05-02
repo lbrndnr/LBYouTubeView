@@ -86,7 +86,7 @@ static NSString *UnescapeString(NSString *string) {
 }
 
 -(void)stopExtracting {
-    [self _closeConnection];
+    [self closeConnection];
 }
 
 - (void)extractVideoURLWithCompletionBlock:(LBYouTubeExtractorCompletionBlock)completionBlock {
@@ -104,7 +104,7 @@ static NSString *UnescapeString(NSString *string) {
 }
 
 
--(NSURL*)_extractYouTubeURLFromFile:(NSString *)html error:(NSError *__autoreleasing *)error {
+-(NSURL*)extractYouTubeURLFromFile:(NSString *)html error:(NSError *__autoreleasing *)error {
     NSString* JSONStart = nil;
     NSString* JSONStartFull = @"ls.setItem('PIGGYBACK_DATA', \")]}'";
     NSString* JSONStartShrunk = [JSONStartFull stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -161,7 +161,7 @@ static NSString *UnescapeString(NSString *string) {
     return nil;
 }
 
--(void)_didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
+-(void)didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
     if (self.delegate) {
         [self.delegate youTubeExtractor:self didSuccessfullyExtractYouTubeURL:videoURL];
     }
@@ -171,7 +171,7 @@ static NSString *UnescapeString(NSString *string) {
     }
 }
 
--(void)_failedExtractingYouTubeURLWithError:(NSError *)error {
+-(void)failedExtractingYouTubeURLWithError:(NSError *)error {
     if (self.delegate) {
         [self.delegate youTubeExtractor:self failedExtractingYouTubeURLWithError:error];
     }
@@ -202,26 +202,26 @@ static NSString *UnescapeString(NSString *string) {
 
 -(void)connectionDidFinishLoading:(NSURLConnection *) connection {
     NSString* html = [[NSString alloc] initWithData:self.buffer encoding:NSUTF8StringEncoding];
-    [self _closeConnection];
+    [self closeConnection];
 
     if (html.length <= 0) {
-        [self _failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:1 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't download the HTML source code. URL might be invalid." forKey:NSLocalizedDescriptionKey]]];
+        [self failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:1 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't download the HTML source code. URL might be invalid." forKey:NSLocalizedDescriptionKey]]];
         return;
     }
     
     NSError* error = nil;
-    self.extractedURL = [self _extractYouTubeURLFromFile:html error:&error];
+    self.extractedURL = [self extractYouTubeURLFromFile:html error:&error];
     if (error) {
-        [self _failedExtractingYouTubeURLWithError:error];
+        [self failedExtractingYouTubeURLWithError:error];
     }
     else {
-        [self _didSuccessfullyExtractYouTubeURL:self.extractedURL];
+        [self didSuccessfullyExtractYouTubeURL:self.extractedURL];
     }
 }
 
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [self _closeConnection];
-    [self _failedExtractingYouTubeURLWithError:error];
+    [self closeConnection];
+    [self failedExtractingYouTubeURLWithError:error];
 }
 
 #pragma mark -
