@@ -34,25 +34,14 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 -(id)initWithURL:(NSURL *)videoURL quality:(LBYouTubeVideoQuality)videoQuality {
     self = [super init];
     if (self) {
-        [self _setupWithURL:videoURL quality:videoQuality];
+        self.youTubeURL = videoURL;
+        self.quality = videoQuality;
     }
-    
     return self;
 }
 
 -(id)initWithID:(NSString *)videoID quality:(LBYouTubeVideoQuality)videoQuality {
-    self = [super init];
-    if (self) {
-        [self _setupWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", videoID]] quality:videoQuality];
-    }
-    
-    return self;
-}
-
--(void)_setupWithURL:(NSURL *)URL quality:(LBYouTubeVideoQuality)videoQuality {
-    self.youTubeURL = URL;
-    self.extractedURL = nil;
-    self.quality = videoQuality;
+    return [self initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", videoID]] quality:videoQuality];
 }
 
 #pragma mark -
