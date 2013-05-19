@@ -36,3 +36,8 @@ LBYouTubeView requires iOS 4. Also, it is deployed for an ARC environment.
 
 ## License
 LBYouTubeView is licensed under the [MIT License](http://opensource.org/licenses/mit-license.php). 
+
+## YouTube EULA
+As stated in Google's [Monetization Guidelines](https://developers.google.com/youtube/creating_monetizable_applications) that attempting to play a YouTube video outside of either the YouTube embedded, custom or chromeless player is strictly prohibited by the API Terms of Service.
+LBYouTubeView most likely does violate those guidelines. However, it seems like Apple lets your app pass through their review. 
+Anyway, use it on your own risk.
