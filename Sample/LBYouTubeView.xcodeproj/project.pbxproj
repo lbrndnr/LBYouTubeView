@@ -16,7 +16,6 @@
 		F22E1E691578FF5600FD9E79 /* LBViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F22E1E671578FF5600FD9E79 /* LBViewController.xib */; };
 		F22E1E6C1578FF6100FD9E79 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F22E1E6A1578FF6100FD9E79 /* InfoPlist.strings */; };
 		F22E1E701578FFBD00FD9E79 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F22E1E6F1578FFBD00FD9E79 /* main.m */; };
-		F233443015790117001DC9D0 /* LBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F233442F157900ED001DC9D0 /* LBViewController.m */; };
 		F23344311579011A001DC9D0 /* LBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F233442D157900ED001DC9D0 /* LBAppDelegate.m */; };
 /* End PBXBuildFile section */
 
@@ -38,8 +37,6 @@
 		F22E1E711578FFC700FD9E79 /* LBYouTubeView-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LBYouTubeView-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		F233442C157900ED001DC9D0 /* LBAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBAppDelegate.h; sourceTree = SOURCE_ROOT; };
 		F233442D157900ED001DC9D0 /* LBAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBAppDelegate.m; sourceTree = SOURCE_ROOT; };
-		F233442E157900ED001DC9D0 /* LBViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LBViewController.h; sourceTree = SOURCE_ROOT; };
-		F233442F157900ED001DC9D0 /* LBViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LBViewController.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,8 +91,6 @@
 			children = (
 				F233442C157900ED001DC9D0 /* LBAppDelegate.h */,
 				F233442D157900ED001DC9D0 /* LBAppDelegate.m */,
-				F233442E157900ED001DC9D0 /* LBViewController.h */,
-				F233442F157900ED001DC9D0 /* LBViewController.m */,
 				F22E1E671578FF5600FD9E79 /* LBViewController.xib */,
 				2B16697015722A920030C509 /* Supporting Files */,
 			);
@@ -153,7 +148,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = LB;
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0500;
 			};
 			buildConfigurationList = 2B16695F15722A920030C509 /* Build configuration list for PBXProject "LBYouTubeView" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -190,7 +185,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F22E1E701578FFBD00FD9E79 /* main.m in Sources */,
-				F233443015790117001DC9D0 /* LBViewController.m in Sources */,
 				F23344311579011A001DC9D0 /* LBAppDelegate.m in Sources */,
 				2BBF35251616D702006A2D02 /* LBYouTubeExtractor.m in Sources */,
 				2BBF352A1616DC2A006A2D02 /* LBYouTubePlayerController.m in Sources */,
@@ -223,11 +217,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					armv7,
-					armv6,
-				);
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -244,9 +236,12 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -255,11 +250,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					armv7,
-					armv6,
-				);
+				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -269,7 +262,9 @@
 				GCC_THUMB_SUPPORT = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
