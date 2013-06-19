@@ -6,15 +6,14 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "LBYouTubePlayerController.h"
+#import "LBYouTubePlayerViewController.h"
 
-@interface LBYouTubePlayerController () 
+@interface LBYouTubePlayerViewController () 
 
 @property (nonatomic, strong) LBYouTubeExtractor* extractor;
 
 @end
-
-@implementation LBYouTubePlayerController
+@implementation LBYouTubePlayerViewController
 
 #pragma mark Initialization
 
@@ -40,8 +39,8 @@
         [self.delegate youTubePlayerViewController:self didSuccessfullyExtractYouTubeURL:videoURL];
     }
     
-    self.contentURL = videoURL;
-    [self play];
+    self.moviePlayer.contentURL = videoURL;
+    [self.moviePlayer play];
 }
 
 -(void)youTubeExtractor:(LBYouTubeExtractor *)extractor failedExtractingYouTubeURLWithError:(NSError *)error {

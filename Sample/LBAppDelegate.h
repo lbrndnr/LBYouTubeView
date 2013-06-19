@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LBYouTube.h"
 
-@interface LBAppDelegate : UIResponder <UIApplicationDelegate>
+@interface LBAppDelegate : UIResponder <UIApplicationDelegate, LBYouTubePlayerControllerDelegate>
 
 @end

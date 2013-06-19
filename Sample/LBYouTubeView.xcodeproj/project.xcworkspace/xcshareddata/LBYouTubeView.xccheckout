@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>1B2DCA3E-D975-48CF-9649-439D94C3EFF0</string>
+	<key>IDESourceControlProjectName</key>
+	<string>LBYouTubeView</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>9B607882-A5D6-4E3F-AE9E-88A138A01A16</key>
+		<string>https://github.com/larcus94/LBYouTubeView.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Sample/LBYouTubeView.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>9B607882-A5D6-4E3F-AE9E-88A138A01A16</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/larcus94/LBYouTubeView.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>9B607882-A5D6-4E3F-AE9E-88A138A01A16</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9B607882-A5D6-4E3F-AE9E-88A138A01A16</string>
+			<key>IDESourceControlWCCName</key>
+			<string>LBYouTubeView</string>
+		</dict>
+	</array>
+</dict>
+</plist>
