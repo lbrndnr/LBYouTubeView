@@ -8,7 +8,8 @@
 
 #import "LBYouTubeExtractor.h"
 
-static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
+static NSString* const kPhoneUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
+static NSString* const kPadUserAgent = @"Mozilla/5.0 (iPad; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
 
 NSString* const kLBYouTubePlayerExtractorErrorDomain = @"LBYouTubeExtractorErrorDomain";
 
@@ -78,7 +79,12 @@ static NSString *UnescapeString(NSString *string) {
 -(void)startExtracting {
     if (!self.buffer || !self.extractedURL) {
         NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:self.youTubeURL];
-        [request setValue:kUserAgent forHTTPHeaderField:@"User-Agent"];
+        
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+            [request setValue:kPhoneUserAgent forHTTPHeaderField:@"User-Agent"];
+        } else {
+            [request setValue:kPadUserAgent forHTTPHeaderField:@"User-Agent"];
+        }
         
         self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
         [self.connection start];
