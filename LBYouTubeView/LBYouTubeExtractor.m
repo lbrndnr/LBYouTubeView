@@ -157,7 +157,7 @@ static NSString *UnescapeString(NSString *string) {
             }
         }
     }
-    else {
+    else if (error) {
         *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:3 userInfo:[NSDictionary dictionaryWithObject:@"The JSON data could not be found." forKey:NSLocalizedDescriptionKey]];
     }
     
