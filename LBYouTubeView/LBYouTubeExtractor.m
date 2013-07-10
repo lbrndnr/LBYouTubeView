@@ -106,7 +106,8 @@ static NSString *UnescapeString(NSString *string) {
 
 -(NSURL*)extractYouTubeURLFromFile:(NSString *)html error:(NSError *__autoreleasing *)error {
     NSString* JSONStart = nil;
-    NSString* JSONStartFull = @"ls.setItem('PIGGYBACK_DATA', \")]}'";
+    NSString *JSONStartFull = @"bootstrap_data = \")]}'";
+   
     NSString* JSONStartShrunk = [JSONStartFull stringByReplacingOccurrencesOfString:@" " withString:@""];
     if ([html rangeOfString:JSONStartFull].location != NSNotFound) {
         JSONStart = JSONStartFull;
@@ -120,7 +121,9 @@ static NSString *UnescapeString(NSString *string) {
         [scanner scanString:JSONStart intoString:nil];
         
         NSString* JSON = nil;
-        [scanner scanUpToString:@"\");" intoString:&JSON];
+        [scanner scanUpToString:@"}\";" intoString:&JSON];
+        JSON = [NSString stringWithFormat:@"%@}",JSON]; // Add closing bracket } to get vallid JSON again
+        
         JSON = UnescapeString(JSON);
         NSError* decodingError = nil;
         NSDictionary* JSONCode = [NSJSONSerialization JSONObjectWithData:[JSON dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&decodingError];
