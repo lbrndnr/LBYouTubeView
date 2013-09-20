@@ -38,7 +38,7 @@ typedef enum {
 -(void)startExtracting;
 -(void)stopExtracting;
 
-- (void)extractVideoURLWithCompletionBlock:(LBYouTubeExtractorCompletionBlock)completionBlock;
+-(void)extractVideoURLWithCompletionBlock:(LBYouTubeExtractorCompletionBlock)completionBlock;
 
 @end
 @protocol LBYouTubeExtractorDelegate <NSObject>

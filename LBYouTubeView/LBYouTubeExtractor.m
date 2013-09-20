@@ -42,7 +42,8 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 }
 
 -(id)initWithID:(NSString *)videoID quality:(LBYouTubeVideoQuality)videoQuality {
-    return [self initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", videoID]] quality:videoQuality];
+    NSURL* URL = (videoID) ? [NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", videoID]] : nil;
+    return [self initWithURL:URL quality:videoQuality];
 }
 
 #pragma mark -
@@ -76,15 +77,11 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
     self.buffer = nil;
 }
 
-
 -(NSURL*)extractYouTubeURLFromFile:(NSString *)html error:(NSError *__autoreleasing *)error {
     NSString* string = html;
     
-    NSRegularExpression* regex = [[NSRegularExpression alloc] initWithPattern:self.extractionExpression options:NSRegularExpressionCaseInsensitive error:nil];
-    
-    NSArray *videos = [regex matchesInString:string
-                                     options:0
-                                       range:NSMakeRange(0, [string length])];
+    NSRegularExpression* regex = [[NSRegularExpression alloc] initWithPattern:self.extractionExpression options:NSRegularExpressionCaseInsensitive error:error];
+    NSArray *videos = [regex matchesInString:string options:0 range:NSMakeRange(0, [string length])];
     
     if ([videos count] > 0) {
         
@@ -111,7 +108,6 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
     *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]];
     
     return nil;
-
 }
 
 -(void)didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
