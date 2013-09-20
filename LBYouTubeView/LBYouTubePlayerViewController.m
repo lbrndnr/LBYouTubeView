@@ -17,12 +17,16 @@
 
 #pragma mark Initialization
 
+-(id)initWithYouTubeURL:(NSURL *)youTubeURL quality:(LBYouTubeVideoQuality)quality {
+    return [self initWithYouTubeURL:youTubeURL quality:quality extractionExpression:nil];
+}
+
 -(id)initWithYouTubeURL:(NSURL *)youTubeURL quality:(LBYouTubeVideoQuality)quality  extractionExpression:(NSString*)expression {
     self = [super initWithContentURL:nil];
     if (self) {
         self.extractor = [[LBYouTubeExtractor alloc] initWithURL:youTubeURL quality:quality];
         self.extractor.delegate = self;
-        if (expression != nil) {
+        if (expression) {
             self.extractor.extractionExpression = expression;
         }
         [self.extractor startExtracting];
@@ -30,17 +34,21 @@
     return self;
 }
 
--(id)initWithYouTubeURL:(NSURL *)youTubeURL quality:(LBYouTubeVideoQuality)quality {
-    return [self initWithYouTubeURL:youTubeURL quality:quality extractionExpression:nil];
-}
-
-
 -(id)initWithYouTubeID:(NSString *)youTubeID quality:(LBYouTubeVideoQuality)quality {
-    return [self initWithYouTubeURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", youTubeID]] quality:quality extractionExpression:nil];
+    return [self initWithYouTubeID:youTubeID quality:quality extractionExpression:nil];
 }
 
 -(id)initWithYouTubeID:(NSString *)youTubeID quality:(LBYouTubeVideoQuality)quality extractionExpression:(NSString*)expression {
-    return [self initWithYouTubeURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", youTubeID]] quality:quality extractionExpression:expression];
+    self = [super initWithContentURL:nil];
+    if (self) {
+        self.extractor = [[LBYouTubeExtractor alloc] initWithID:youTubeID quality:quality];
+        self.extractor.delegate = self;
+        if (expression) {
+            self.extractor.extractionExpression = expression;
+        }
+        [self.extractor startExtracting];
+    }
+    return self;
 }
 
 
