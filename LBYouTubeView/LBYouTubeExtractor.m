@@ -81,10 +81,9 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
     NSString* string = html;
     
     NSRegularExpression* regex = [[NSRegularExpression alloc] initWithPattern:self.extractionExpression options:NSRegularExpressionCaseInsensitive error:error];
-    NSArray *videos = [regex matchesInString:string options:0 range:NSMakeRange(0, [string length])];
+    NSArray* videos = [regex matchesInString:string options:0 range:NSMakeRange(0, [string length])];
     
-    if ([videos count] > 0) {
-        
+    if (videos.count > 0) {
         NSTextCheckingResult* checkingResult = nil;
         
         if (self.quality == LBYouTubeVideoQualityLarge) {
