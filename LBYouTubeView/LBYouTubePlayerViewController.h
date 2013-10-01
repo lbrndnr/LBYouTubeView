@@ -18,7 +18,9 @@
 @property (nonatomic, weak) IBOutlet id <LBYouTubePlayerControllerDelegate> delegate;
 
 -(id)initWithYouTubeURL:(NSURL*)youTubeURL quality:(LBYouTubeVideoQuality)quality;
+-(id)initWithYouTubeURL:(NSURL*)youTubeURL quality:(LBYouTubeVideoQuality)quality extractionExpression:(NSString*)expression;
 -(id)initWithYouTubeID:(NSString*)youTubeID quality:(LBYouTubeVideoQuality)quality;
+-(id)initWithYouTubeID:(NSString*)youTubeID quality:(LBYouTubeVideoQuality)quality extractionExpression:(NSString*)expression;
 
 @end
 @protocol LBYouTubePlayerControllerDelegate <NSObject>
