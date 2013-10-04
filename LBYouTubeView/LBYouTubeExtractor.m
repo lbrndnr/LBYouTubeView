@@ -40,7 +40,7 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
         self.youTubeURL = videoURL;
         self.quality = videoQuality;
         self.extractionExpression = @"(?!\\\\\")http[^\"]*?itag=[^\"]*?(?=\\\\\")";
-		self.signatureExtractionExpression = @"(?<=sig\\\\\": \\\\\")[^\"]*?(?=\\\\\")";
+		self.signatureExtractionExpression = @"(\\\\\\\"sig\\\\\\\": \\\\\\\"[^\"]+\\\\\")";
 		self.signAlgo = [NSJSONSerialization JSONObjectWithData:[algoJson dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
     }
     return self;
@@ -113,13 +113,12 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
 			index = [videos count] - 1;
         }
 		checkingResult = [videos objectAtIndex:index];
-		
         
         NSMutableString* streamURL = [NSMutableString stringWithString: [string substringWithRange:checkingResult.range]];
         [streamURL replaceOccurrencesOfString:@"\\\\u0026" withString:@"&" options:NSCaseInsensitiveSearch range:NSMakeRange(0, streamURL.length)];
         [streamURL replaceOccurrencesOfString:@"\\\\\\" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, streamURL.length)];
-
-		// Check the signature:
+		
+        // Check the signature:
 		if ([sigs count] > 0) {
 			sigCheckingResult = [sigs objectAtIndex:index];
 			NSString* encrSyg = [string substringWithRange:sigCheckingResult.range];
