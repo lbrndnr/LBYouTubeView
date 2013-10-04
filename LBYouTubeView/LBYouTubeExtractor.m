@@ -41,7 +41,7 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
         self.quality = videoQuality;
         self.extractionExpression = @"(?!\\\\\")http[^\"]*?itag=[^\"]*?(?=\\\\\")";
 		self.signatureExtractionExpression = @"(\\\\\\\"sig\\\\\\\": \\\\\\\"[^\"]+\\\\\")";
-		self.signAlgo = [NSJSONSerialization JSONObjectWithData:[algoJson dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
+        self.signAlgo = [NSJSONSerialization JSONObjectWithData:[algoJson dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
     }
     return self;
 }
@@ -121,7 +121,12 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
         // Check the signature:
 		if ([sigs count] > 0) {
 			sigCheckingResult = [sigs objectAtIndex:index];
-			NSString* encrSyg = [string substringWithRange:sigCheckingResult.range];
+            NSString* encrSyg = [string substringWithRange:sigCheckingResult.range];
+            
+            sig_regex = [[NSRegularExpression alloc] initWithPattern:@"(?<=sig\\\\\": \\\\\")[^\"]*?(?=\\\\\")" options:NSRegularExpressionCaseInsensitive error:nil];
+            sigCheckingResult = [sig_regex firstMatchInString:encrSyg options:0 range:NSMakeRange(0, encrSyg.length)];
+            
+            encrSyg = [encrSyg substringWithRange:sigCheckingResult.range];
             
             NSString* sig = nil;
             
@@ -133,18 +138,13 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
             if(signature_range.location != NSNotFound)
             {
                 NSString * signature_functionName = [string substringWithRange:NSMakeRange(signature_range.location+10, signature_range.length-10)];
-                //NSLog(@"got signature_functionName = %@", signature_functionName);
                 
                 //We need to extrach the javascript part of the HTML document contaning the function.
-                regexp = [[NSRegularExpression alloc] initWithPattern:[NSString stringWithFormat:@"function %@\\(([a-z,]+)\\)\\{([^}]+)\\}", signature_functionName] options:0 error:error];
+                NSMutableString* jsCode = [self loadNeededJSFunctions:signature_functionName andContentFile:string andSearchDepth:1];
                 
-                NSRange function_range = [regexp rangeOfFirstMatchInString:string options:0 range:NSMakeRange(0, [string length])];
-                
-                if(function_range.location != NSNotFound)
+                if(jsCode)
                 {
-                    //NSString * jsCode = @"function Gp(a){a=a.split("");a=a.reverse();a=a.slice(1);var b=a[0];a[0]=a[68%a.length];a[68]=b;return a.join("")}";
-                    NSString * jsCode = [string substringWithRange:function_range];
-                    JSContext *context = [[JSContext alloc] initWithVirtualMachine:[[JSVirtualMachine alloc] init]];
+                    JSContext *context = [[JSContext alloc] init];
                     
                     [context evaluateScript:jsCode];
                     
@@ -176,14 +176,66 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
 
 -(NSString *)decryptSignature:(NSString *)signature
 {
-	NSMutableString* res = [NSMutableString string];
-	for (int i=0; i<[self.signAlgo count]; i++) {
-		NSNumber* index = [self.signAlgo objectAtIndex:i];
-		NSRange range = {[index integerValue], 1};
-		[res insertString:[signature substringWithRange:range] atIndex:i];
-	}
-	return [NSString stringWithString:res];
+    NSString * dectyptedString = [self _static_decrypt_signature:signature];
+    
+    if(dectyptedString){
+        return dectyptedString;
+    }
+    else{
+        NSLog(@"Failed to staticly pass the string!");
+        return signature;
+    }
 }
+
+-(NSMutableString *)loadNeededJSFunctions:(NSString *)functionName andContentFile:(NSString *)content andSearchDepth:(int)depth
+{
+    if(depth > 10)
+        return [NSMutableString new];
+    
+    NSMutableString * jsFunction = [NSMutableString new];
+    
+    NSRegularExpression* regexp = [[NSRegularExpression alloc] initWithPattern:[NSString stringWithFormat:@"function %@\\(([a-z,]+)\\)\\{([^}]+)\\}", functionName] options:0 error:nil];
+    
+    NSRange function_range = [regexp rangeOfFirstMatchInString:content options:0 range:NSMakeRange(0, [content length])];
+    
+    if(function_range.length != NSNotFound)
+    {
+        //We have the function, read it out and check if we need to do recursive call
+        jsFunction = [NSMutableString stringWithString:[content substringWithRange:function_range]];
+        
+        regexp = [[NSRegularExpression alloc] initWithPattern:@"(?<==)[a-zA-z]+(?=\\([0-9a-z,]+\\))" options:NSRegularExpressionCaseInsensitive error:nil];
+        
+        NSArray *functionCalls = [regexp matchesInString:jsFunction options:0 range:NSMakeRange(0, jsFunction.length)];
+        
+        if(functionCalls.count > 0)
+        {
+            //NSLog(@"loadNeededJSFunctions : Number of sub functions = %d", functionCalls.count);
+            NSMutableArray *functionNames = [NSMutableArray new];
+            for (NSTextCheckingResult* func in functionCalls) {
+                NSString * name = [jsFunction substringWithRange:func.range];
+                if([functionNames indexOfObject:name] == NSNotFound)
+                {
+                    [functionNames addObject:name];
+                }
+            }
+            
+            for (NSString* func in functionNames)
+            {
+                [jsFunction appendString:@"\n"];
+                
+                [jsFunction appendString:[self loadNeededJSFunctions:func andContentFile:content andSearchDepth:depth++]];
+            }
+            return jsFunction;
+        }
+        else
+            return jsFunction;
+    }
+    
+    NSLog(@"Warning : Unable to extract JS function....");
+    return [NSMutableString new];
+}
+
+
 
 -(NSString *)_static_decrypt_signature:(NSString *)signature{
     //    if age_gate{
