@@ -36,7 +36,7 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
     if (self) {
         self.youTubeURL = videoURL;
         self.quality = videoQuality;
-        self.extractionExpression = @"(?!\\\\\")http[^\"]*?itag=[^\"]*?(?=\\\\\")";
+        self.extractionExpression = @"(?<=\\\\\")http[^\"]*?itag=[^\"]*?(?=\\\\\")";
     }
     return self;
 }
