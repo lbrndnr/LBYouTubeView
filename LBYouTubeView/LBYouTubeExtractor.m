@@ -63,7 +63,6 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
         [request setValue:kUserAgent forHTTPHeaderField:@"User-Agent"];
         
         self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
-        [self.connection start];
     }
 }
 
