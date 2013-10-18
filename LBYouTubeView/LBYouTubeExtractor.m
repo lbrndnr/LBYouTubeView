@@ -50,6 +50,8 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 #pragma mark Other Methods
 
 -(void)startExtracting {
+    self.extractedURL = nil;
+    
     NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     NSArray *cookies = [cookieStorage cookies];
     for (NSHTTPCookie *cookie in cookies) {
@@ -62,7 +64,8 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
         NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:self.youTubeURL];
         [request setValue:kUserAgent forHTTPHeaderField:@"User-Agent"];
         
-        self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
+        self.connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
+        [self.connection start];
     }
 }
 
@@ -159,18 +162,20 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
     NSString* html = [[NSString alloc] initWithData:self.buffer encoding:NSUTF8StringEncoding];
     [self closeConnection];
 
-    if (html.length <= 0) {
-        [self failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:1 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't download the HTML source code. URL might be invalid." forKey:NSLocalizedDescriptionKey]]];
-        return;
-    }
-    
-    NSError* error = nil;
-    self.extractedURL = [self extractYouTubeURLFromFile:html error:&error];
-    if (error) {
-        [self failedExtractingYouTubeURLWithError:error];
-    }
-    else {
-        [self didSuccessfullyExtractYouTubeURL:self.extractedURL];
+    if (!self.extractedURL || [[self.extractedURL absoluteString] length] <= 0) {
+        if (html.length <= 0) {
+            [self failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:1 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't download the HTML source code. URL might be invalid." forKey:NSLocalizedDescriptionKey]]];
+            return;
+        }
+        
+        NSError* error = nil;
+        self.extractedURL = [self extractYouTubeURLFromFile:html error:&error];
+        if (error) {
+            [self failedExtractingYouTubeURLWithError:error];
+        }
+        else {
+            [self didSuccessfullyExtractYouTubeURL:self.extractedURL];
+        }
     }
 }
 
