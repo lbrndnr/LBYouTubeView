@@ -39,7 +39,8 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
     if (self) {
         self.youTubeURL = videoURL;
         self.quality = videoQuality;
-        self.extractionExpression = @"(?!\\\\\")http[^\"]*?itag=[^\"]*?(?=\\\\\")";
+        //self.extractionExpression = @"(?!\\\\\")http[^\"]*?itag=[^\"]*?(?=\\\\\")";
+        self.extractionExpression = @"(\\\\\")http[^\"]*?itag=[^\"]*?(\\\\\")";
 		self.signatureExtractionExpression = @"(\\\\\\\"sig\\\\\\\": \\\\\\\"[^\"]+\\\\\")";
         self.signAlgo = [NSJSONSerialization JSONObjectWithData:[algoJson dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
     }
@@ -95,8 +96,12 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
     
     NSRegularExpression* regex = [[NSRegularExpression alloc] initWithPattern:self.extractionExpression options:NSRegularExpressionCaseInsensitive error:error];
 	NSRegularExpression* sig_regex = [[NSRegularExpression alloc] initWithPattern:self.signatureExtractionExpression options:NSRegularExpressionCaseInsensitive error:nil];
+    NSDate *start = [NSDate date];
     NSArray* videos = [regex matchesInString:string options:0 range:NSMakeRange(0, [string length])];
-	NSArray* sigs = [sig_regex matchesInString:string options:0 range:NSMakeRange(0, [string length])];
+	NSTimeInterval interval = [[NSDate date] timeIntervalSinceDate:start];
+    NSLog(@"Time used to get videos : %f", interval);
+    
+    NSArray* sigs = [sig_regex matchesInString:string options:0 range:NSMakeRange(0, [string length])];
     
     if (videos.count > 0) {
         NSTextCheckingResult* checkingResult = nil;
@@ -115,6 +120,7 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
 		checkingResult = [videos objectAtIndex:index];
         
         NSMutableString* streamURL = [NSMutableString stringWithString: [string substringWithRange:checkingResult.range]];
+        [streamURL replaceOccurrencesOfString:@"\\\"" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, streamURL.length)];
         [streamURL replaceOccurrencesOfString:@"\\\\u0026" withString:@"&" options:NSCaseInsensitiveSearch range:NSMakeRange(0, streamURL.length)];
         [streamURL replaceOccurrencesOfString:@"\\\\\\" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, streamURL.length)];
 		
