@@ -36,7 +36,6 @@ typedef enum {
 -(id)initWithID:(NSString*)videoID quality:(LBYouTubeVideoQuality)quality;
 
 -(void)startExtracting;
--(void)stopExtracting;
 
 -(void)extractVideoURLWithCompletionBlock:(LBYouTubeExtractorCompletionBlock)completionBlock;
 
