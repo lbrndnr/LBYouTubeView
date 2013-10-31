@@ -51,7 +51,6 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 #pragma mark Other Methods
 
 -(void)startExtracting {
-    DLog(@"startExtracting");
     self.extractedURL = nil;
     NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     NSArray *cookies = [cookieStorage cookies];
@@ -64,13 +63,15 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
            parameters:nil
               success:^(AFHTTPRequestOperation *operation, id responseObject) {
                   NSString *htmlString = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-                  NSError* error = nil;
-                  self.extractedURL = [self extractYouTubeURLFromFile:htmlString error:&error];
-                  if (error) {
-                      [self failedExtractingYouTubeURLWithError:error];
-                  } else {
-                      [self didSuccessfullyExtractYouTubeURL:self.extractedURL];
-                  }
+                  [self extractYouTubeURLFromFile:htmlString
+                                       completion:^(NSURL *videoURL, NSError *error) {
+                                           self.extractedURL = videoURL;
+                                           if (error) {
+                                               [self failedExtractingYouTubeURLWithError:error];
+                                           } else {
+                                               [self didSuccessfullyExtractYouTubeURL:self.extractedURL];
+                                           }
+                                       }];
               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                   [self failedExtractingYouTubeURLWithError:[NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:1 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't download the HTML source code. URL might be invalid." forKey:NSLocalizedDescriptionKey]]];
               }];
@@ -99,36 +100,46 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 #pragma mark -
 #pragma mark Private
 
--(NSURL*)extractYouTubeURLFromFile:(NSString *)html error:(NSError *__autoreleasing *)error {
-    NSString* string = html;
-    
-    NSRegularExpression* regex = [[NSRegularExpression alloc] initWithPattern:self.extractionExpression options:NSRegularExpressionCaseInsensitive error:error];
-    NSArray* videos = [regex matchesInString:string options:0 range:NSMakeRange(0, [string length])];
-    
-    if (videos.count > 0) {
-        NSTextCheckingResult* checkingResult = nil;
+-(void)extractYouTubeURLFromFile:(NSString *)html completion:(void(^)(NSURL *videoURL, NSError *error))completion {
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        NSError *error = nil;
         
-        if (self.quality == LBYouTubeVideoQualityLarge) {
-            checkingResult = [videos objectAtIndex:0];
-        }
-        else if (self.quality == LBYouTubeVideoQualityMedium) {
-            unsigned int index = (unsigned int)MIN(videos.count-1, 1U);
-            checkingResult= [videos objectAtIndex:index];
-        }
-        else {
-            checkingResult = [videos lastObject];
-        }
+        //Background Thread
+#if DEBUG
+        NSDate *startTime = [NSDate date];
+#endif
         
-        NSMutableString* streamURL = [NSMutableString stringWithString: [string substringWithRange:checkingResult.range]];
-        [streamURL replaceOccurrencesOfString:@"\\\\u0026" withString:@"&" options:NSCaseInsensitiveSearch range:NSMakeRange(0, streamURL.length)];
-        [streamURL replaceOccurrencesOfString:@"\\\\\\" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, streamURL.length)];
+        NSRegularExpression* regex = [[NSRegularExpression alloc] initWithPattern:self.extractionExpression options:NSRegularExpressionCaseInsensitive error:&error];
+        NSArray* videos = [regex matchesInString:html options:0 range:NSMakeRange(0, [html length])];
         
-        return [NSURL URLWithString:streamURL];
-    }
-    
-    *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]];
-    
-    return nil;
+        if (videos.count > 0) {
+            NSTextCheckingResult* checkingResult = nil;
+            
+            if (self.quality == LBYouTubeVideoQualityLarge) {
+                checkingResult = [videos objectAtIndex:0];
+            }
+            else if (self.quality == LBYouTubeVideoQualityMedium) {
+                unsigned int index = (unsigned int)MIN(videos.count-1, 1U);
+                checkingResult= [videos objectAtIndex:index];
+            }
+            else {
+                checkingResult = [videos lastObject];
+            }
+            
+            NSMutableString* streamURL = [NSMutableString stringWithString: [html substringWithRange:checkingResult.range]];
+            [streamURL replaceOccurrencesOfString:@"\\\\u0026" withString:@"&" options:NSCaseInsensitiveSearch range:NSMakeRange(0, streamURL.length)];
+            [streamURL replaceOccurrencesOfString:@"\\\\\\" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, streamURL.length)];
+            dispatch_async(dispatch_get_main_queue(), ^(void){
+                completion([NSURL URLWithString:streamURL], error);
+            });
+        } else {
+            error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]];
+            dispatch_async(dispatch_get_main_queue(), ^(void){
+                completion(nil, error);
+            });
+        }
+        DLog(@"EXTRACTION TIME %.0f ms", (-[startTime timeIntervalSinceDate:[NSDate date]] * 1000));
+    });
 }
 
 -(void)didSuccessfullyExtractYouTubeURL:(NSURL *)videoURL {
