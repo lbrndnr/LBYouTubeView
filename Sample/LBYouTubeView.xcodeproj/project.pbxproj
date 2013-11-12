@@ -19,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2B15999117ECAAD10011923B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		2B16696515722A920030C509 /* LBYouTubeView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LBYouTubeView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B16696915722A920030C509 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2B16696B15722A920030C509 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -80,6 +81,7 @@
 				2B16696915722A920030C509 /* UIKit.framework */,
 				2B16696B15722A920030C509 /* Foundation.framework */,
 				2B16696D15722A920030C509 /* CoreGraphics.framework */,
+				2B15999117ECAAD10011923B /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

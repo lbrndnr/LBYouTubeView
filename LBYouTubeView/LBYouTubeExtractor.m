@@ -17,34 +17,6 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeInvalidHTML  =    1;
 NSInteger const LBYouTubePlayerExtractorErrorCodeNoStreamURL  =    2;
 NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 
-// Modified answer from StackOverflow http://stackoverflow.com/questions/2099349/using-objective-c-cocoa-to-unescape-unicode-characters-ie-u1234
-
-static NSString *UnescapeString(NSString *string) {
-    // will cause trouble if you have "abc\\\\uvw"
-    // \u   --->    \U
-    NSString *esc1 = [string stringByReplacingOccurrencesOfString:@"\\u" withString:@"\\U"];
-    
-    // "    --->    \"
-    NSString *esc2 = [esc1 stringByReplacingOccurrencesOfString:@"\"" withString:@"\\\""];
-    
-    // \\"  --->    \"
-    NSString *esc3 = [esc2 stringByReplacingOccurrencesOfString:@"\\\\\"" withString:@"\\\""];
-    
-    NSString *quoted = [[@"\"" stringByAppendingString:esc3] stringByAppendingString:@"\""];
-    NSData *data = [quoted dataUsingEncoding:NSUTF8StringEncoding];
-    
-    //  NSPropertyListFormat format = 0;
-    //  NSString *errorDescr = nil;
-    NSString *unesc = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListImmutable format:NULL errorDescription:NULL];
-    
-    if ([unesc isKindOfClass:[NSString class]]) {
-        // \U   --->    \u
-        return [unesc stringByReplacingOccurrencesOfString:@"\\U" withString:@"\\u"];
-    }
-    
-    return nil;
-}
-
 @interface LBYouTubeExtractor ()
 
 @property (nonatomic, strong) NSURLConnection* connection;
@@ -65,18 +37,28 @@ static NSString *UnescapeString(NSString *string) {
     if (self) {
         self.youTubeURL = videoURL;
         self.quality = videoQuality;
+        self.extractionExpression = @"(?!\\\\\")http[^\"]*?itag=[^\"]*?(?=\\\\\")";
     }
     return self;
 }
 
 -(id)initWithID:(NSString *)videoID quality:(LBYouTubeVideoQuality)videoQuality {
-    return [self initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", videoID]] quality:videoQuality];
+    NSURL* URL = (videoID) ? [NSURL URLWithString:[NSString stringWithFormat:@"http://www.youtube.com/watch?v=%@", videoID]] : nil;
+    return [self initWithURL:URL quality:videoQuality];
 }
 
 #pragma mark -
 #pragma mark Other Methods
 
 -(void)startExtracting {
+    NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    NSArray *cookies = [cookieStorage cookies];
+    for (NSHTTPCookie *cookie in cookies) {
+        if ([cookie.domain rangeOfString:@"youtube"].location != NSNotFound) {
+            [cookieStorage deleteCookie:cookie];
+        }
+    }
+    
     if (!self.buffer || !self.extractedURL) {
         NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:self.youTubeURL];
         
@@ -109,63 +91,37 @@ static NSString *UnescapeString(NSString *string) {
     self.buffer = nil;
 }
 
-
 -(NSURL*)extractYouTubeURLFromFile:(NSString *)html error:(NSError *__autoreleasing *)error {
-    NSString* JSONStart = nil;
-    NSString *JSONStartFull = @"bootstrap_data = \")]}'";
-   
-    NSString* JSONStartShrunk = [JSONStartFull stringByReplacingOccurrencesOfString:@" " withString:@""];
-    if ([html rangeOfString:JSONStartFull].location != NSNotFound) {
-        JSONStart = JSONStartFull;
-    }
-    else if ([html rangeOfString:JSONStartShrunk].location != NSNotFound) {
-        JSONStart = JSONStartShrunk;
-    }
-    if (JSONStart != nil) {
-        NSScanner* scanner = [NSScanner scannerWithString:html];
-        [scanner scanUpToString:JSONStart intoString:nil];
-        [scanner scanString:JSONStart intoString:nil];
+    NSString* string = html;
+    
+    NSRegularExpression* regex = [[NSRegularExpression alloc] initWithPattern:self.extractionExpression options:NSRegularExpressionCaseInsensitive error:error];
+    NSArray* videos = [regex matchesInString:string options:0 range:NSMakeRange(0, [string length])];
+    
+    if (videos.count > 0) {
+        NSTextCheckingResult* checkingResult = nil;
         
-        NSString* JSON = nil;
-        [scanner scanUpToString:@"}\";" intoString:&JSON];
-        JSON = [NSString stringWithFormat:@"%@}",JSON]; // Add closing bracket } to get vallid JSON again
-        
-        JSON = UnescapeString(JSON);
-        NSError* decodingError = nil;
-        NSDictionary* JSONCode = [NSJSONSerialization JSONObjectWithData:[JSON dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:&decodingError];
-
-        if (decodingError) {
-            *error = decodingError;
+        if (self.quality == LBYouTubeVideoQualityLarge) {
+            checkingResult = [videos objectAtIndex:0];
+        }
+        else if (self.quality == LBYouTubeVideoQualityMedium) {
+            unsigned int index = MIN(videos.count-1, 1U);
+            checkingResult= [videos objectAtIndex:index];
         }
         else {
-            NSArray* videos = [[[JSONCode objectForKey:@"content"] objectForKey:@"video"] objectForKey:@"fmt_stream_map"];
-            NSString* streamURL = nil;
-            if (videos.count) {
-                NSString* streamURLKey = @"url";
-                
-                if (self.quality == LBYouTubeVideoQualityLarge) {
-                    streamURL = [[videos objectAtIndex:0] objectForKey:streamURLKey];
-                }
-                else if (self.quality == LBYouTubeVideoQualityMedium) {
-                    unsigned int index = MIN(videos.count-1, 1U);
-                    streamURL = [[videos objectAtIndex:index] objectForKey:streamURLKey];
-                }
-                else {
-                    streamURL = [[videos lastObject] objectForKey:streamURLKey];
-                }
-            }
-            
-            if (streamURL) {
-                return [NSURL URLWithString:streamURL];
-            }
-            else {
-                *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]];
-            }
+            checkingResult = [videos lastObject];
         }
+        
+        NSMutableString* streamURL = [NSMutableString stringWithString: [string substringWithRange:checkingResult.range]];
+        [streamURL replaceOccurrencesOfString:@"\\\\u0026" withString:@"&" options:NSCaseInsensitiveSearch range:NSMakeRange(0, streamURL.length)];
+        [streamURL replaceOccurrencesOfString:@"\\\\\\" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, streamURL.length)];
+                
+        return [NSURL URLWithString:streamURL];
     }
-    else if (error) {
-        *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:3 userInfo:[NSDictionary dictionaryWithObject:@"The JSON data could not be found." forKey:NSLocalizedDescriptionKey]];
+    
+    if (error) {
+        *error = [NSError errorWithDomain:kLBYouTubePlayerExtractorErrorDomain code:2 userInfo:[NSDictionary dictionaryWithObject:@"Couldn't find the stream URL." forKey:NSLocalizedDescriptionKey]];
     }
+
     
     return nil;
 }
