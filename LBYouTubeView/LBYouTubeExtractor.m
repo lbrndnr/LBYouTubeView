@@ -41,6 +41,7 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
         self.quality = videoQuality;
         //self.extractionExpression = @"(?!\\\\\")http[^\"]*?itag=[^\"]*?(?=\\\\\")";
         self.extractionExpression = @"(\\\\\")http[^\"]*?itag=[^\"]*?(\\\\\")";
+//        self.extractionExpression = @"http[^\"]*?itag=[^\"]*?";
 		self.signatureExtractionExpression = @"(\\\\\\\"sig\\\\\\\": \\\\\\\"[^\"]+\\\\\")";
         self.signAlgo = [NSJSONSerialization JSONObjectWithData:[algoJson dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
     }
