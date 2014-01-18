@@ -18,7 +18,7 @@
     // in the demo app, other than it logs the extracted URL
     // to the console, as you can see here:
     
-    LBYouTubeExtractor *extractor = [[LBYouTubeExtractor alloc] initWithURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"] quality:LBYouTubeVideoQualityLarge];
+    LBYouTubeExtractor* extractor = [[LBYouTubeExtractor alloc] initWithURL:[NSURL URLWithString:@"http://www.youtube.com/watch?v=1fTIhC1WSew&list=FLEYfH4kbq85W_CiOTuSjf8w&feature=mh_lolz"] quality:LBYouTubeVideoQualityLarge];
     
     [extractor extractVideoURLWithCompletionBlock:^(NSURL *videoURL, NSError *error) {
         if(!error) {

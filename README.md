@@ -1,3 +1,7 @@
+# IMPORTANT
+`LBYouTubeView` has been discontinued. I won't fix any issues anymore. Although this approach fixes a couple of issues, it does not work reliably enough.
+Check out [XCDYouTubeVideoPlayerViewController](https://github.com/0xced/XCDYouTubeVideoPlayerViewController). It's similar to this project but seems to work better as its way of extracting the video URL is less hacky.
+
 # LBYouTubeView
 
 ## About
