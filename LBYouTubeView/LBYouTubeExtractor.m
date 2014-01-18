@@ -8,8 +8,8 @@
 
 #import "LBYouTubeExtractor.h"
 
-static NSString* const kPhoneUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
-static NSString* const kPadUserAgent = @"Mozilla/5.0 (iPad; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
+static NSString* const LBYouTubeExtractorPhoneUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
+static NSString* const LBYouTubeExtractorPadUserAgent = @"Mozilla/5.0 (iPad; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
 
 NSString* const kLBYouTubePlayerExtractorErrorDomain = @"LBYouTubeExtractorErrorDomain";
 
@@ -63,9 +63,9 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
         NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:self.youTubeURL];
         
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-            [request setValue:kPhoneUserAgent forHTTPHeaderField:@"User-Agent"];
+            [request setValue:LBYouTubeExtractorPhoneUserAgent forHTTPHeaderField:@"User-Agent"];
         } else {
-            [request setValue:kPadUserAgent forHTTPHeaderField:@"User-Agent"];
+            [request setValue:LBYouTubeExtractorPadUserAgent forHTTPHeaderField:@"User-Agent"];
         }
         
         self.connection = [NSURLConnection connectionWithRequest:request delegate:self];
