@@ -205,8 +205,12 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
     
     NSRange function_range = [regexp rangeOfFirstMatchInString:content options:0 range:NSMakeRange(0, [content length])];
     
-    if(function_range.length != NSNotFound)
+    DLog(@"RANGE LOCATION:%d LENGTH: %d", function_range.location, function_range.length);
+    
+    if(function_range.length != NSNotFound && function_range.length > 0)
     {
+        DLog(@"RANGE LOCATION:%d LENGTH: %d", function_range.location, function_range.length);
+        
         //We have the function, read it out and check if we need to do recursive call
         jsFunction = [NSMutableString stringWithString:[content substringWithRange:function_range]];
         
