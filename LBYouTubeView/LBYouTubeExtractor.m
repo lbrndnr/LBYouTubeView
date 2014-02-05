@@ -137,10 +137,12 @@ NSInteger const LBYouTubePlayerExtractorErrorCodeNoJSONData   =    3;
 }
 
 -(void)failedExtractingYouTubeURLWithError:(NSError *)error {
+    
+    NSLog(@"Failed to query mp4: %@", error);
     if (self.delegate) {
         [self.delegate youTubeExtractor:self failedExtractingYouTubeURLWithError:error];
     }
-
+    
     if(self.completionBlock) {
         self.completionBlock(nil, error);
     }
