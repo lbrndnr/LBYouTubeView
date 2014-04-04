@@ -22,13 +22,24 @@
 }
 
 -(id)initWithYouTubeURL:(NSURL *)youTubeURL quality:(LBYouTubeVideoQuality)quality  extractionExpression:(NSString*)expression {
-    self = [super initWithContentURL:nil];
+	return [self initWithYouTubeURL:youTubeURL quality:quality extractionExpression:expression signatureExtracionExpression:nil signatureAlgo:nil];
+}
+
+-(id)initWithYouTubeURL:(NSURL*)youTubeURL quality:(LBYouTubeVideoQuality)quality extractionExpression:(NSString*)expression signatureExtracionExpression:(NSString*)signatureExpression signatureAlgo:(NSArray*)algo;
+{
+	self = [super initWithContentURL:nil];
     if (self) {
         self.extractor = [[LBYouTubeExtractor alloc] initWithURL:youTubeURL quality:quality];
         self.extractor.delegate = self;
         if (expression) {
             self.extractor.extractionExpression = expression;
         }
+		if (signatureExpression) {
+			self.extractor.signatureExtractionExpression = signatureExpression;
+		}
+		if (algo) {
+			self.extractor.signAlgo = algo;
+		}
         [self.extractor startExtracting];
     }
     return self;
@@ -39,6 +50,9 @@
 }
 
 -(id)initWithYouTubeID:(NSString *)youTubeID quality:(LBYouTubeVideoQuality)quality extractionExpression:(NSString*)expression {
+	return [self initWithYouTubeID:youTubeID quality:quality extractionExpression:expression signatureExtracionExpression:nil signatureAlgo:nil];
+}
+-(id)initWithYouTubeID:(NSString*)youTubeID quality:(LBYouTubeVideoQuality)quality extractionExpression:(NSString*)expression signatureExtracionExpression:(NSString*)signatureExpression signatureAlgo:(NSArray*)algo {
     self = [super initWithContentURL:nil];
     if (self) {
         self.extractor = [[LBYouTubeExtractor alloc] initWithID:youTubeID quality:quality];
@@ -46,6 +60,13 @@
         if (expression) {
             self.extractor.extractionExpression = expression;
         }
+		if (signatureExpression) {
+			self.extractor.signatureExtractionExpression = signatureExpression;
+		}
+		if (algo) {
+			self.extractor.signAlgo = algo;
+		}
+
         [self.extractor startExtracting];
     }
     return self;

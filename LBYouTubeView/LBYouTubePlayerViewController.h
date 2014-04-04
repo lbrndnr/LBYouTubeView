@@ -19,8 +19,10 @@
 
 -(id)initWithYouTubeURL:(NSURL*)youTubeURL quality:(LBYouTubeVideoQuality)quality;
 -(id)initWithYouTubeURL:(NSURL*)youTubeURL quality:(LBYouTubeVideoQuality)quality extractionExpression:(NSString*)expression;
+-(id)initWithYouTubeURL:(NSURL*)youTubeURL quality:(LBYouTubeVideoQuality)quality extractionExpression:(NSString*)expression signatureExtracionExpression:(NSString*)signatureExpression signatureAlgo:(NSArray*)algo;
 -(id)initWithYouTubeID:(NSString*)youTubeID quality:(LBYouTubeVideoQuality)quality;
 -(id)initWithYouTubeID:(NSString*)youTubeID quality:(LBYouTubeVideoQuality)quality extractionExpression:(NSString*)expression;
+-(id)initWithYouTubeID:(NSString*)youTubeID quality:(LBYouTubeVideoQuality)quality extractionExpression:(NSString*)expression signatureExtracionExpression:(NSString*)signatureExpression signatureAlgo:(NSArray*)algo;
 
 @end
 @protocol LBYouTubePlayerControllerDelegate <NSObject>
