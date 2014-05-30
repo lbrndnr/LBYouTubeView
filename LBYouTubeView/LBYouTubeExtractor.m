@@ -10,6 +10,7 @@
 #import <JavaScriptCore/JavaScriptCore.h>
 
 static NSString* const kUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3";
+//static NSString* const kUserAgent = @"Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25";
 
 NSString* const kLBYouTubePlayerExtractorErrorDomain = @"LBYouTubeExtractorErrorDomain";
 
@@ -116,7 +117,7 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
              index = (int)MIN(videos.count-1, 1U);
         }
         else {
-			index = (int)[videos count] - 1;
+			index = (unsigned int)[videos count] - 1;
         }
 		checkingResult = [videos objectAtIndex:index];
         
