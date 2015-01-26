@@ -113,10 +113,10 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
             index = 0;
         }
         else if (self.quality == LBYouTubeVideoQualityMedium) {
-             index = MIN(videos.count-1, 1U);
+             index = (int)MIN(videos.count-1, 1U);
         }
         else {
-			index = [videos count] - 1;
+			index = (int)[videos count] - 1;
         }
 		checkingResult = [videos objectAtIndex:index];
         
@@ -205,11 +205,11 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
     
     NSRange function_range = [regexp rangeOfFirstMatchInString:content options:0 range:NSMakeRange(0, [content length])];
     
-    DLog(@"RANGE LOCATION:%d LENGTH: %d", function_range.location, function_range.length);
+    DLog(@"RANGE LOCATION:%ld LENGTH: %ld", (unsigned long)function_range.location, (unsigned long)function_range.length);
     
     if(function_range.length != NSNotFound && function_range.length > 0)
     {
-        DLog(@"RANGE LOCATION:%d LENGTH: %d", function_range.location, function_range.length);
+        DLog(@"RANGE LOCATION:%ld LENGTH: %ld", (unsigned long)function_range.location, (unsigned long)function_range.length);
         
         //We have the function, read it out and check if we need to do recursive call
         jsFunction = [NSMutableString stringWithString:[content substringWithRange:function_range]];
@@ -255,7 +255,7 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
     //        if len(s) == 86:
     //            return s[2:63] + s[82] + s[64:82] + s[63]
     //    }
-    NSLog(@"length %d", signature.length);
+    NSLog(@"length %ld", (unsigned long)signature.length);
     
     switch (signature.length) {
         case 93:
