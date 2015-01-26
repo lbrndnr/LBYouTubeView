@@ -117,11 +117,7 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
              index = (int)MIN(videos.count-1, 1U);
         }
         else {
-<<<<<<< HEAD
-			index = (unsigned int)[videos count] - 1;
-=======
 			index = (int)[videos count] - 1;
->>>>>>> deattached
         }
 		checkingResult = [videos objectAtIndex:index];
         
@@ -260,11 +256,7 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
     //        if len(s) == 86:
     //            return s[2:63] + s[82] + s[64:82] + s[63]
     //    }
-<<<<<<< HEAD
-    NSLog(@"length %lu", (unsigned long)signature.length);
-=======
     NSLog(@"length %ld", (unsigned long)signature.length);
->>>>>>> deattached
     
     switch (signature.length) {
         case 93:
