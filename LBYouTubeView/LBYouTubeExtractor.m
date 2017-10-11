@@ -515,7 +515,7 @@ static NSString* algoJson = @"[80, 79, 78, 77, 76, 75, 74, 73, 72, 71, 70, 69, 6
         capacity = 0;
     }
     
-    self.buffer = [[NSMutableData alloc] initWithCapacity:capacity];
+    self.buffer = [[NSMutableData alloc] initWithCapacity:(NSInteger)capacity];
 }
 
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
